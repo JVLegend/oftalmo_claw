@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block page_subtitle %}Visao geral do sistema em tempo real{% endblock %}
+
+{% block content %}
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon teal">&#128065;</div>
+        <div>
+            <div class="stat-value" id="stat-exams-today">47</div>
+            <div class="stat-label">Exames Hoje</div>
+            <div class="stat-trend up">+12% vs ontem</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon coral">&#9733;</div>
+        <div>
+            <div class="stat-value" id="stat-pending-cases">3</div>
+            <div class="stat-label">Casos Pendentes</div>
+            <div class="stat-trend down">1 urgente</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon emerald">&#128100;</div>
+        <div>
+            <div class="stat-value" id="stat-specialists">4</div>
+            <div class="stat-label">Especialistas Online</div>
+            <div class="stat-trend up">de 6 cadastrados</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon navy">&#9650;</div>
+        <div>
+            <div class="stat-value" id="stat-quality">89.2</div>
+            <div class="stat-label">Score de Qualidade</div>
+            <div class="stat-trend up">+2.1 este mes</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon amber">&#9998;</div>
+        <div>
+            <div class="stat-value" id="stat-reports">8</div>
+            <div class="stat-label">Laudos Pendentes</div>
+            <div class="stat-trend">tempo medio: 2.4h</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon teal">&#8721;</div>
+        <div>
+            <div class="stat-value" id="stat-monthly">312</div>
+            <div class="stat-label">Exames este Mes</div>
+            <div class="stat-trend up">+8.3% vs mes anterior</div>
+        </div>
+    </div>
+</div>
+
+<!-- Two Column: Recent Cases + Specialists -->
+<div class="two-col">
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Casos Recentes de Segunda Opiniao</div>
+                <a href="/second-opinion" class="btn btn-sm btn-outline">Ver Todos</a>
+            </div>
+            <div class="card-body">
+                <!-- Case 1 -->
+                <div class="case-card" style="border: 1px solid var(--slate-200);">
+                    <div class="case-header">
+                        <div style="display:flex;align-items:center;">
+                            <div class="case-icon">&#128065;</div>
+                            <div>
+                                <div class="case-title">Caso #2847</div>
+                                <div class="case-patient">Paciente: Feminino, 56 anos</div>
+                            </div>
+                        </div>
+                        <span class="badge badge-urgent">&#9888; Urgente</span>
+                    </div>
+                    <div class="case-meta">
+                        <div>
+                            <div class="case-meta-label">Solicitado por</div>
+                            <div class="case-meta-value">Dr. Carlos Silva</div>
+                        </div>
+                        <div>
+                            <div class="case-meta-label">Atribuido a</div>
+                            <div class="case-meta-value">Dra. Ana Oliveira</div>
+                        </div>
+                        <div>
+                            <div class="case-meta-label">Data/Hora</div>
+                            <div class="case-meta-value">2024-11-28 14:30</div>
+                        </div>
+                        <div>
+                            <div class="case-meta-label">Respostas</div>
+                            <div class="case-meta-value">1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="case-card" style="border: 1px solid var(--slate-200);">
+                    <div class="case-header">
+                        <div style="display:flex;align-items:center;">
+                            <div class="case-icon" style="background: rgba(59,130,246,0.1);">&#128065;</div>
+                            <div>
+                                <div class="case-title">Caso #2845</div>
+                                <div class="case-patient">Paciente: Masculino, 68 anos</div>
+                            </div>
+                        </div>
+                        <span class="badge badge-analysis">&#128172; Em Analise</span>
+                    </div>
+                    <div class="case-meta">
+                        <div>
+                            <div class="case-meta-label">Solicitado por</div>
+                            <div class="case-meta-value">Dra. Maria Santos</div>
+                        </div>
+                        <div>
+                            <div class="case-meta-label">Atribuido a</div>
+                            <div class="case-meta-value">Dr. Roberto Costa</div>
+                        </div>
+                        <div>
+                            <div class="case-meta-label">Data/Hora</div>
+                            <div class="case-meta-value">2024-11-28 10:15</div>
+                        </div>
+                        <div>
+                            <div class="case-meta-label">Respostas</div>
+                            <div class="case-meta-value">2</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specialists Sidebar -->
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Especialistas Disponiveis</div>
+            </div>
+            <div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#0D9488;">DAO</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dra. Ana Oliveira</div>
+                        <div class="specialist-specialty">Retina</div>
+                        <div class="specialist-cases">3 casos ativos</div>
+                    </div>
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#1E3A5F;">DRC</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dr. Roberto Costa</div>
+                        <div class="specialist-specialty">Glaucoma</div>
+                        <div class="specialist-cases">2 casos ativos</div>
+                    </div>
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#6366F1;">DMS</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dra. Maria Santos</div>
+                        <div class="specialist-specialty">Cornea</div>
+                        <div class="specialist-cases">5 casos ativos</div>
+                    </div>
+                    <div class="status-dot offline"></div>
+                </div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#0D9488;">DPM</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dr. Paulo Mendes</div>
+                        <div class="specialist-specialty">Retina</div>
+                        <div class="specialist-cases">1 casos ativos</div>
+                    </div>
+                    <div class="status-dot online"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-header">
+                <div class="card-title">Acoes Rapidas</div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+                <a href="/second-opinion" class="btn btn-primary" style="justify-content:center;">&#9998; Novo Caso</a>
+                <a href="#" class="btn btn-outline" style="justify-content:center;">&#128065; Analisar Imagem</a>
+                <a href="#" class="btn btn-outline" style="justify-content:center;">&#8721; Calculadora IOL</a>
+                <a href="/trends" class="btn btn-outline" style="justify-content:center;">&#9650; Ver Tendencias</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load stats from API
+fetch('/api/v1/dashboard/stats')
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('stat-exams-today').textContent = data.total_exams_today;
+        document.getElementById('stat-pending-cases').textContent = data.pending_cases;
+        document.getElementById('stat-specialists').textContent = data.active_specialists;
+        document.getElementById('stat-quality').textContent = data.avg_quality_score;
+        document.getElementById('stat-reports').textContent = data.reports_pending;
+        document.getElementById('stat-monthly').textContent = data.exams_this_month;
+    })
+    .catch(() => {});
+</script>
+{% endblock %}

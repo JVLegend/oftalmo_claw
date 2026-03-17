@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block page_title %}Segunda Opiniao{% endblock %}
+{% block page_subtitle %}Sistema colaborativo de consultas entre especialistas{% endblock %}
+
+{% block topbar_actions %}
+<button class="btn btn-primary" onclick="openNewCase()">&#9992; Novo Caso</button>
+{% endblock %}
+
+{% block content %}
+<!-- Tabs -->
+<div class="filter-bar">
+    <div class="tabs">
+        <button class="tab active" onclick="filterCases('all', this)">Pendentes (3)</button>
+        <button class="tab" onclick="filterCases('completed', this)">Concluidos (2)</button>
+    </div>
+</div>
+
+<div class="two-col">
+    <!-- Cases List -->
+    <div id="cases-list">
+        <!-- Case #2847 - Urgent -->
+        <div class="case-card">
+            <div class="case-header">
+                <div style="display:flex;align-items:center;">
+                    <div class="case-icon">&#128065;</div>
+                    <div>
+                        <div class="case-title">Caso #2847</div>
+                        <div class="case-patient">Paciente: Feminino, 56 anos</div>
+                    </div>
+                </div>
+                <span class="badge badge-urgent">&#9888; Urgente</span>
+            </div>
+            <div class="case-meta">
+                <div>
+                    <div class="case-meta-label">Solicitado por</div>
+                    <div class="case-meta-value">Dr. Carlos Silva</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Atribuido a</div>
+                    <div class="case-meta-value">Dra. Ana Oliveira</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Data/Hora</div>
+                    <div class="case-meta-value">2024-11-28 14:30</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Respostas</div>
+                    <div class="case-meta-value">1</div>
+                </div>
+            </div>
+            <div class="case-actions">
+                <button class="btn btn-sm btn-primary">&#128172; Abrir Discussao</button>
+                <button class="btn btn-sm btn-outline">&#128065; Ver Imagens</button>
+            </div>
+        </div>
+
+        <!-- Case #2845 - In Analysis -->
+        <div class="case-card">
+            <div class="case-header">
+                <div style="display:flex;align-items:center;">
+                    <div class="case-icon" style="background: rgba(59,130,246,0.1);">&#128065;</div>
+                    <div>
+                        <div class="case-title">Caso #2845</div>
+                        <div class="case-patient">Paciente: Masculino, 68 anos</div>
+                    </div>
+                </div>
+                <span class="badge badge-analysis">&#128172; Em Analise</span>
+            </div>
+            <div class="case-meta">
+                <div>
+                    <div class="case-meta-label">Solicitado por</div>
+                    <div class="case-meta-value">Dra. Maria Santos</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Atribuido a</div>
+                    <div class="case-meta-value">Dr. Roberto Costa</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Data/Hora</div>
+                    <div class="case-meta-value">2024-11-28 10:15</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Respostas</div>
+                    <div class="case-meta-value">2</div>
+                </div>
+            </div>
+            <div class="case-actions">
+                <button class="btn btn-sm btn-primary">&#128172; Abrir Discussao</button>
+                <button class="btn btn-sm btn-outline">&#128065; Ver Imagens</button>
+            </div>
+        </div>
+
+        <!-- Case #2843 - Pending -->
+        <div class="case-card">
+            <div class="case-header">
+                <div style="display:flex;align-items:center;">
+                    <div class="case-icon" style="background: rgba(245,158,11,0.1);">&#128065;</div>
+                    <div>
+                        <div class="case-title">Caso #2843</div>
+                        <div class="case-patient">Paciente: Feminino, 42 anos</div>
+                    </div>
+                </div>
+                <span class="badge badge-pending">&#9203; Pendente</span>
+            </div>
+            <div class="case-meta">
+                <div>
+                    <div class="case-meta-label">Solicitado por</div>
+                    <div class="case-meta-value">Dr. Paulo Mendes</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Atribuido a</div>
+                    <div class="case-meta-value">Dra. Maria Santos</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Data/Hora</div>
+                    <div class="case-meta-value">2024-11-27 16:45</div>
+                </div>
+                <div>
+                    <div class="case-meta-label">Respostas</div>
+                    <div class="case-meta-value">0</div>
+                </div>
+            </div>
+            <div class="case-actions">
+                <button class="btn btn-sm btn-primary">&#128172; Abrir Discussao</button>
+                <button class="btn btn-sm btn-outline">&#128065; Ver Imagens</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Specialists Panel -->
+    <div>
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Especialistas Disponiveis</div>
+            </div>
+            <div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#0D9488;">DAO</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dra. Ana Oliveira</div>
+                        <div class="specialist-specialty">Retina</div>
+                        <div class="specialist-cases">3 casos ativos</div>
+                    </div>
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#1E3A5F;">DRC</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dr. Roberto Costa</div>
+                        <div class="specialist-specialty">Glaucoma</div>
+                        <div class="specialist-cases">2 casos ativos</div>
+                    </div>
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#6366F1;">DMS</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dra. Maria Santos</div>
+                        <div class="specialist-specialty">Cornea</div>
+                        <div class="specialist-cases">5 casos ativos</div>
+                    </div>
+                    <div class="status-dot offline"></div>
+                </div>
+                <div class="specialist-card">
+                    <div class="specialist-avatar" style="background:#0D9488;">DPM</div>
+                    <div class="specialist-info">
+                        <div class="specialist-name">Dr. Paulo Mendes</div>
+                        <div class="specialist-specialty">Retina</div>
+                        <div class="specialist-cases">1 casos ativos</div>
+                    </div>
+                    <div class="status-dot online"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function filterCases(status, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+}
+
+function openNewCase() {
+    alert('Formulario de novo caso - em desenvolvimento');
+}
+</script>
+{% endblock %}

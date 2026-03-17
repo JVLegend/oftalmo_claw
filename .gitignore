@@ -1,0 +1,157 @@
+# ============================================
+# OftalmoClaw - .gitignore
+# By GeekVision
+# ============================================
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+*.whl
+pip-wheel-metadata/
+*.manifest
+*.spec
+.Python
+develop-eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+
+# ---------- Node / Frontend ----------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# ---------- IDE / Editor ----------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+.spyderproject
+.spyproject
+.ropeproject
+
+# ---------- OS ----------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# ---------- Testing ----------
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+cover/
+*.cover
+nosetests.xml
+coverage.xml
+*.coveragerc
+
+# ---------- Docker ----------
+docker-compose.override.yml
+
+# ---------- Database ----------
+*.db
+*.sqlite3
+*.sqlite
+db.json
+
+# ---------- Logs ----------
+*.log
+logs/
+log/
+
+# ---------- Secrets & Config ----------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+secrets/
+credentials/
+*.pem
+*.key
+*.cert
+*.crt
+
+# ---------- Railway ----------
+.railway/
+
+# ---------- Hermes Agent Data ----------
+.hermes/
+memories/
+trajectories/
+sessions/
+
+# ---------- Medical Data (CRITICAL - NEVER COMMIT) ----------
+patient_data/
+dicom/
+*.dcm
+*.nii
+*.nii.gz
+medical_images/
+exports/
+reports_output/
+
+# ---------- ML / Models ----------
+*.h5
+*.hdf5
+*.pkl
+*.pickle
+*.joblib
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.pb
+models/weights/
+checkpoints/
+
+# ---------- Misc ----------
+*.bak
+*.tmp
+*.temp
+*.cache
+.cache/
+tmp/
+temp/

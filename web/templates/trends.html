@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block page_title %}Dashboard de Tendencias{% endblock %}
+{% block page_subtitle %}Analise de evolucao e performance ao longo do tempo{% endblock %}
+
+{% block topbar_actions %}
+<button class="btn btn-sm btn-outline">&#9707; Filtros</button>
+<button class="btn btn-sm btn-coral">&#11015; Exportar</button>
+{% endblock %}
+
+{% block content %}
+<!-- Period Tabs -->
+<div class="filter-bar">
+    <div class="tabs">
+        <button class="tab" onclick="setPeriod('week', this)">Semana</button>
+        <button class="tab active" onclick="setPeriod('month', this)">Mes</button>
+        <button class="tab" onclick="setPeriod('quarter', this)">Trimestre</button>
+        <button class="tab" onclick="setPeriod('year', this)">Ano</button>
+    </div>
+</div>
+
+<!-- Volume Chart -->
+<div class="card" style="margin-bottom: 24px;">
+    <div class="card-header">
+        <div class="card-title">Volume e Qualidade por Mes</div>
+    </div>
+    <div class="card-body" id="volume-chart">
+        <div class="chart-bar-row">
+            <div class="chart-label">Jul</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: 46.5%;">
+                    <span class="chart-bar-value">145</span>
+                </div>
+            </div>
+            <div class="chart-score">85.2 <small>score</small></div>
+        </div>
+        <div class="chart-bar-row">
+            <div class="chart-label">Ago</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: 57.1%;">
+                    <span class="chart-bar-value">178</span>
+                </div>
+            </div>
+            <div class="chart-score">86.1 <small>score</small></div>
+        </div>
+        <div class="chart-bar-row">
+            <div class="chart-label">Set</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: 65.1%;">
+                    <span class="chart-bar-value">203</span>
+                </div>
+            </div>
+            <div class="chart-score">87.8 <small>score</small></div>
+        </div>
+        <div class="chart-bar-row">
+            <div class="chart-label">Out</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: 79.2%;">
+                    <span class="chart-bar-value">247</span>
+                </div>
+            </div>
+            <div class="chart-score">88.5 <small>score</small></div>
+        </div>
+        <div class="chart-bar-row">
+            <div class="chart-label">Nov</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: 92.6%;">
+                    <span class="chart-bar-value">289</span>
+                </div>
+            </div>
+            <div class="chart-score">89.2 <small>score</small></div>
+        </div>
+        <div class="chart-bar-row">
+            <div class="chart-label">Dez</div>
+            <div class="chart-bar-container">
+                <div class="chart-bar" style="width: 100%;">
+                    <span class="chart-bar-value">312</span>
+                </div>
+            </div>
+            <div class="chart-score">90.1 <small>score</small></div>
+        </div>
+    </div>
+</div>
+
+<!-- Two Column: Exam Types + Rankings -->
+<div class="two-col-equal">
+    <!-- Performance by Exam Type -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Performance por Tipo de Exame</div>
+        </div>
+        <div class="card-body" id="exam-types">
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">Fundoscopia</span>
+                    <span><span class="exam-type-stats">542 exames</span> &nbsp; <span class="exam-type-score">91.2</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 91.2%;"></div>
+                </div>
+            </div>
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">OCT</span>
+                    <span><span class="exam-type-stats">389 exames</span> &nbsp; <span class="exam-type-score">88.7</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 88.7%;"></div>
+                </div>
+            </div>
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">Campimetria</span>
+                    <span><span class="exam-type-stats">276 exames</span> &nbsp; <span class="exam-type-score">85.4</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 85.4%;"></div>
+                </div>
+            </div>
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">Topografia</span>
+                    <span><span class="exam-type-stats">198 exames</span> &nbsp; <span class="exam-type-score">90.3</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 90.3%;"></div>
+                </div>
+            </div>
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">Biometria</span>
+                    <span><span class="exam-type-stats">167 exames</span> &nbsp; <span class="exam-type-score">92.1</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 92.1%;"></div>
+                </div>
+            </div>
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">Retinografia</span>
+                    <span><span class="exam-type-stats">134 exames</span> &nbsp; <span class="exam-type-score">87.9</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 87.9%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Operator Rankings -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">Ranking de Operadores</div>
+        </div>
+        <div class="card-body" id="rankings">
+            <div class="ranking-row">
+                <div class="ranking-number gold">1</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">Dr. Carlos Silva</div>
+                    <div class="ranking-exams">234 exames realizados</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="ranking-score">92.1</div>
+                    <div class="ranking-trend">+5.2%</div>
+                </div>
+            </div>
+            <div class="ranking-row">
+                <div class="ranking-number silver">2</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">Dra. Ana Oliveira</div>
+                    <div class="ranking-exams">198 exames realizados</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="ranking-score">91.8</div>
+                    <div class="ranking-trend">+3.1%</div>
+                </div>
+            </div>
+            <div class="ranking-row">
+                <div class="ranking-number bronze">3</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">Dr. Roberto Costa</div>
+                    <div class="ranking-exams">176 exames realizados</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="ranking-score">90.5</div>
+                    <div class="ranking-trend">+2.8%</div>
+                </div>
+            </div>
+            <div class="ranking-row">
+                <div class="ranking-number default">4</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">Dra. Maria Santos</div>
+                    <div class="ranking-exams">165 exames realizados</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="ranking-score">89.7</div>
+                    <div class="ranking-trend">+4.5%</div>
+                </div>
+            </div>
+            <div class="ranking-row">
+                <div class="ranking-number default">5</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">Dr. Paulo Mendes</div>
+                    <div class="ranking-exams">143 exames realizados</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="ranking-score">88.2</div>
+                    <div class="ranking-trend">+1.9%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function setPeriod(period, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    // TODO: fetch /api/v1/analytics/trends?period=${period} and update chart
+}
+</script>
+{% endblock %}
