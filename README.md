@@ -5,550 +5,638 @@
 <h1 align="center">OftalmoClaw</h1>
 
 <p align="center">
-  <strong>AI-Powered Ophthalmology Mission Control</strong>
+  <strong>Mission Control de Oftalmologia com IA</strong>
   <br />
-  <em>Intelligent agent for ophthalmic image analysis, clinical decision support, and collaborative diagnostics</em>
+  <em>Agente inteligente para analise de imagens, suporte a decisao clinica e diagnostico colaborativo</em>
 </p>
 
 <p align="center">
-  <a href="#features">Features</a> &bull;
-  <a href="#quick-start">Quick Start</a> &bull;
-  <a href="#deploy">Deploy</a> &bull;
-  <a href="#architecture">Architecture</a> &bull;
-  <a href="#skills">Skills</a> &bull;
-  <a href="#second-opinion">Second Opinion</a> &bull;
-  <a href="#dashboard">Dashboard</a> &bull;
+  <a href="#o-que-e">O que e</a> &bull;
+  <a href="#guia-rapido-para-medicos">Guia para Medicos</a> &bull;
+  <a href="#usando-com-claude-code">Claude Code</a> &bull;
+  <a href="#instalacao-tecnica">Instalacao</a> &bull;
+  <a href="#segunda-opiniao">Segunda Opiniao</a> &bull;
+  <a href="#dashboard-de-tendencias">Tendencias</a> &bull;
   <a href="#api">API</a> &bull;
-  <a href="#contributing">Contributing</a>
+  <a href="#contribuindo">Contribuir</a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.11+-0D9488?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/license-MIT-0D9488?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/licenca-MIT-0D9488?style=for-the-badge" />
   <img src="https://img.shields.io/badge/railway-deploy-0D9488?style=for-the-badge&logo=railway&logoColor=white" />
-  <img src="https://img.shields.io/badge/status-active-0D9488?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/LGPD-compliant-0D9488?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/LGPD-compativel-0D9488?style=for-the-badge" />
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Created%20by-GeekVision-1E3A5F?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Criado%20por-GeekVision-1E3A5F?style=for-the-badge" />
 </p>
 
 ---
 
-> **OftalmoClaw** is an open-source, self-improving AI agent specialized in ophthalmology. It combines intelligent image analysis, clinical decision support, collaborative second-opinion workflows, and real-time analytics into a single mission control platform designed for eye care professionals.
->
-> Built on the architecture of [Hermes Agent](https://github.com/NousResearch/hermes-agent) by Nous Research, OftalmoClaw extends it with deep ophthalmology domain knowledge, medical-grade tools, and a purpose-built web dashboard.
+## O que e
+
+**OftalmoClaw** e um sistema open-source que funciona como um assistente de IA especializado em oftalmologia. Ele combina:
+
+- **Analise de imagens** (OCT, fundoscopia, topografia, campimetria)
+- **Segunda opiniao** entre especialistas em tempo real
+- **Dashboard de tendencias** com volume de exames, qualidade e rankings
+- **Calculadoras clinicas** (LIO, acuidade visual, PIO corrigida)
+- **Gerador de laudos** com terminologia padrao
+
+Pense nele como um "painel de controle" para sua clinica ou consultorio, com IA embutida.
+
+### O que NAO e
+
+- **Nao e um dispositivo medico** - nao tem registro ANVISA/FDA
+- **Nao substitui o medico** - toda analise precisa de validacao por oftalmologista
+- **Nao armazena prontuario** - e um sistema de apoio, nao um PEP/EMR
+
+### Relacao com o Hermes Agent
+
+O OftalmoClaw foi construido com base na arquitetura do [Hermes Agent](https://github.com/NousResearch/hermes-agent), um projeto open-source da Nous Research. Aproveitamos:
+
+| Do Hermes Agent | No OftalmoClaw |
+|-----------------|----------------|
+| Sistema de skills (conhecimento em Markdown) | Skills especificas de oftalmologia |
+| Registry de tools (ferramentas do agente) | Tools de analise de imagem, laudos, calculadoras |
+| Gateway de mensagens (Telegram, WhatsApp) | Notificacoes de casos para medicos |
+| Memoria persistente entre sessoes | Historico de casos e padroes clinicos |
+
+**Voce NAO precisa instalar o Hermes Agent separadamente.** O OftalmoClaw e um projeto independente que ja inclui tudo que precisa.
 
 ---
 
-## Why OftalmoClaw?
+## Guia Rapido para Medicos
 
-| Problem | Solution |
-|---------|----------|
-| Ophthalmic image interpretation requires years of training | AI-assisted analysis of OCT, fundoscopy, visual fields, topography |
-| Second opinions are slow and fragmented | Real-time collaborative case discussion between specialists |
-| No unified view of clinical volume and trends | Mission Control dashboard with analytics and KPIs |
-| Existing tools don't understand ophthalmology context | Domain-specific skills, calculators, and protocols built-in |
-| Medical AI tools are closed-source and expensive | Fully open-source, self-hostable, Railway-ready |
+> Se voce nunca mexeu com programacao, este guia e para voce.
 
----
+### O que voce vai precisar
 
-## Features
+| Item | O que e | Como conseguir |
+|------|---------|----------------|
+| **Computador** | Mac, Windows ou Linux | O que voce ja usa |
+| **Chave de IA** | Uma "senha" que permite ao sistema usar inteligencia artificial | Veja o passo 1 abaixo |
+| **Railway** (opcional) | Um servico na nuvem que roda o sistema 24h | Veja a secao de Deploy |
 
-### Core Agent
-- **Self-improving AI** with persistent memory and skill generation
-- **Multi-model support** - Claude, GPT-4, Gemini, open-source models via OpenRouter
-- **40+ tools** including terminal, web search, file management, code execution
-- **13 messaging platforms** - Telegram, WhatsApp, Discord, Slack, email, and more
-- **Persistent memory** across sessions with FTS5 search
+### Passo 1: Obter sua chave de IA
 
-### Ophthalmology Suite
-- **Image Analysis** - AI-powered interpretation of OCT, fundoscopy, topography, visual fields
-- **Clinical Calculators** - IOL calculation (SRK/T, Barrett), VA conversion, IOP correction
-- **Report Generator** - Structured ophthalmic reports with standard terminology
-- **Protocol Engine** - Evidence-based clinical protocols (AAO, CBO, EURETINA)
-- **Drug Reference** - Complete ophthalmic pharmacology database
+O OftalmoClaw precisa de uma chave de API para acessar modelos de IA (como o Claude da Anthropic). Voce tem duas opcoes:
 
-### Second Opinion System
-- **Case submission** with images, clinical history, and exam data
-- **Specialist routing** by subspecialty (Retina, Glaucoma, Cornea, etc.)
-- **Real-time discussion threads** between referring and consulting doctors
-- **Urgency levels** and status tracking (Pending, In Analysis, Completed)
-- **AI-assisted draft opinions** for specialist review
-- **Notifications** via WhatsApp, Telegram, or email
+#### Opcao A: OpenRouter (mais facil, varios modelos)
 
-### Mission Control Dashboard
-- **Volume & Quality trends** over time (weekly, monthly, quarterly, yearly)
-- **Performance by exam type** - Fundoscopy, OCT, Visual Fields, Topography
-- **Operator rankings** with quality scores and growth metrics
-- **Active users**, average report time, pathology distribution
-- **Export** to CSV/PDF for administrative reporting
+1. Acesse [openrouter.ai](https://openrouter.ai)
+2. Clique em **"Sign Up"** e crie uma conta (pode usar Google)
+3. Va em **"Keys"** no menu lateral
+4. Clique em **"Create Key"**
+5. Copie a chave que comeca com `sk-or-...`
+6. Adicione creditos: va em **"Credits"** e adicione $5 (rende ~500 consultas simples)
 
----
+#### Opcao B: Anthropic direto (melhor qualidade com Claude)
 
-## Quick Start
+1. Acesse [console.anthropic.com](https://console.anthropic.com)
+2. Crie uma conta
+3. Va em **"API Keys"**
+4. Clique em **"Create Key"**
+5. Copie a chave que comeca com `sk-ant-...`
+6. Adicione creditos em **"Billing"** (minimo $5)
 
-### Prerequisites
+#### Quanto custa?
 
-- Python 3.11+
-- An LLM API key (OpenRouter, Anthropic, OpenAI, or compatible)
+| Uso | Custo estimado/mes |
+|-----|--------------------|
+| Consultas de texto simples (perguntas clinicas) | ~$2-5 |
+| Analise de imagens (OCT, fundoscopia) | ~$5-15 |
+| Uso intensivo (clinica com varios medicos) | ~$20-50 |
 
-### Installation
+> Os modelos de IA cobram por "tokens" (palavras processadas). Imagens custam mais que texto. Voce pode acompanhar seus gastos no painel do OpenRouter ou Anthropic.
+
+### Passo 2: Rodar o sistema
+
+#### Caminho facil: Railway (na nuvem, sem instalar nada)
+
+1. Crie uma conta gratis em [railway.app](https://railway.app) (pode usar GitHub ou Google)
+2. Clique em **"New Project"** > **"Deploy from GitHub repo"**
+3. Conecte este repositorio
+4. Em **"Variables"**, adicione:
+   - `OPENROUTER_API_KEY` = sua chave do passo 1
+   - `SECRET_KEY` = qualquer frase longa (ex: `minha-clinica-oftalmologia-2024`)
+5. Clique em **"Deploy"**
+6. Em ~2 minutos voce tera uma URL como `oftalmo-claw-production.up.railway.app`
+7. Abra essa URL no navegador - pronto!
+
+**Custo do Railway:** Plano Starter e gratuito para testes. Plano Pro custa $5/mes para uso continuo.
+
+#### Caminho local: No seu computador
+
+Se voce prefere rodar no seu proprio computador (mais privado, sem custo de servidor):
 
 ```bash
-# Clone the repository
+# 1. Instale o Python 3.11+ (se nao tiver)
+#    Mac: baixe em python.org ou use "brew install python"
+#    Windows: baixe em python.org e marque "Add to PATH" na instalacao
+
+# 2. Baixe o projeto (no Terminal/Prompt de Comando)
 git clone https://github.com/geekvision/oftalmo-claw.git
 cd oftalmo-claw
 
-# Create virtual environment
+# 3. Prepare o ambiente
 python -m venv .venv
-source .venv/bin/activate  # Linux/macOS
-# .venv\Scripts\activate   # Windows
+source .venv/bin/activate    # Mac/Linux
+# .venv\Scripts\activate     # Windows
 
-# Install dependencies
+# 4. Instale as dependencias
 pip install -r requirements.txt
 
-# Copy and configure environment
+# 5. Configure sua chave de IA
 cp .env.example .env
-# Edit .env with your API keys and settings
+# Abra o arquivo .env com qualquer editor de texto
+# e cole sua chave na linha OPENROUTER_API_KEY=
 
-# Run the application
+# 6. Inicie!
 python main.py
 ```
 
-### First Run
+Abra o navegador em `http://localhost:8000` e voce vera o Mission Control.
+
+### O que voce vai ver
+
+Ao abrir o sistema, voce tera acesso a:
+
+**Mission Control (pagina principal)**
+- Resumo do dia: exames realizados, casos pendentes, especialistas online
+- Acesso rapido a todas as ferramentas
+- Ultimos casos de segunda opiniao
+
+**Segunda Opiniao**
+- Lista de casos pendentes com nivel de urgencia
+- Painel de especialistas disponiveis (Retina, Glaucoma, Cornea...)
+- Discussao por caso com historico completo
+- Upload de imagens (OCT, retinografia, etc.)
+
+**Dashboard de Tendencias**
+- Volume de exames por periodo (semana/mes/trimestre/ano)
+- Score de qualidade por tipo de exame
+- Ranking de operadores por produtividade e qualidade
+- Exportacao para CSV/PDF
+
+---
+
+<h2 id="usando-com-claude-code">Usando com Claude Code</h2>
+
+Se voce ja usa o **Claude Code** (a ferramenta de linha de comando da Anthropic), pode integra-lo diretamente com o OftalmoClaw para desenvolver, personalizar e operar o sistema.
+
+### O que e o Claude Code?
+
+O Claude Code e um assistente de programacao que roda no seu terminal. Voce conversa com ele em portugues e ele edita codigo, roda comandos e resolve problemas. E como ter um programador assistente 24h.
+
+### Como usar juntos
 
 ```bash
-# Interactive setup wizard
-python main.py --setup
+# 1. Abra o terminal na pasta do projeto
+cd oftalmo-claw
 
-# Or start directly with CLI
-python main.py --mode cli
+# 2. Inicie o Claude Code
+claude
 
-# Start the web Mission Control
-python main.py --mode web
+# 3. Agora voce pode pedir coisas como:
 
-# Start messaging gateway (Telegram, WhatsApp, etc.)
-python main.py --mode gateway
+> "Adicione um novo tipo de exame chamado Paquimetria no dashboard de tendencias"
+
+> "Crie uma skill de farmacologia com os colirios mais usados em glaucoma"
+
+> "Configure o gateway do Telegram para eu receber notificacoes de novos casos"
+
+> "Adicione um campo de CID-10 no formulario de segunda opiniao"
+
+> "Mude a cor do cabecalho para azul mais escuro"
 ```
 
-Open your browser at `http://localhost:8000` to access the Mission Control.
+### Fluxo recomendado
+
+```
+Voce (medico) descreve o que quer em portugues
+        |
+Claude Code entende e edita o codigo
+        |
+Voce testa no navegador (localhost:8000)
+        |
+Gostou? Peca para o Claude fazer deploy no Railway
+        |
+Nao gostou? Descreva o ajuste e ele corrige
+```
+
+### Dicas para medicos usando Claude Code
+
+- **Seja especifico**: em vez de "melhore o sistema", diga "adicione um campo de pressao intraocular no caso de segunda opiniao"
+- **Descreva como medico**: use termos clinicos naturalmente - "quero classificar por ETDRS", "incluir escala de Shaffer"
+- **Peca screenshots**: diga "abra o navegador e me mostre como ficou"
+- **Salve versoes**: diga "faca um commit com essas mudancas" para nao perder trabalho
+
+### Arquivo CLAUDE.md
+
+O projeto inclui um arquivo `CLAUDE.md` na raiz que da contexto ao Claude Code sobre o projeto. Isso faz com que ele entenda automaticamente:
+
+- A estrutura de pastas e arquivos
+- O padrao de skills (Markdown com frontmatter YAML)
+- O padrao de tools (registro no registry.py)
+- O tema de cores medicas
+- As convencoes do projeto
 
 ---
 
-## Deploy
+## Funcionalidades
 
-### Railway (Recommended)
+### Hoje (implementado)
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/oftalmo-claw)
+| Funcionalidade | Status | Descricao |
+|---------------|--------|-----------|
+| Mission Control | MVP | Dashboard principal com stats e acesso rapido |
+| Segunda Opiniao | MVP | Interface de casos, especialistas, urgencia |
+| Dashboard Tendencias | MVP | Volume, qualidade, rankings (dados demo) |
+| Skills Oftalmologicas | Parcial | Core e Imaging completos, outros em andamento |
+| Calculadora IOL | MVP | SRK/T simplificado via API |
+| Conversor Acuidade | Pronto | Snellen, decimal, LogMAR |
+| Login | UI | Tela pronta, auth em desenvolvimento |
+| API REST | MVP | Endpoints para cases, analytics, calculadoras |
+| Deploy Railway | Pronto | Dockerfile + railway.json configurados |
 
-1. Click the button above or create a new project on [Railway](https://railway.app)
-2. Connect your GitHub repository
-3. Set the required environment variables:
+### Em desenvolvimento
 
-```
-OPENROUTER_API_KEY=sk-or-...
-SECRET_KEY=your-secret-key-here
-DATABASE_URL=${{Postgres.DATABASE_URL}}
-```
-
-4. Deploy. Railway will use the included `Dockerfile` automatically.
-
-### Docker
-
-```bash
-# Build
-docker build -t oftalmo-claw .
-
-# Run
-docker run -d \
-  --name oftalmo-claw \
-  -p 8000:8000 \
-  -e OPENROUTER_API_KEY=sk-or-... \
-  -e SECRET_KEY=your-secret-key \
-  -v oftalmo-data:/app/data \
-  oftalmo-claw
-```
-
-### Docker Compose
-
-```yaml
-version: '3.8'
-services:
-  app:
-    build: .
-    ports:
-      - "8000:8000"
-    environment:
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - SECRET_KEY=${SECRET_KEY}
-      - DATABASE_URL=postgresql://oftalmo:oftalmo@db:5432/oftalmo
-    volumes:
-      - app-data:/app/data
-    depends_on:
-      - db
-
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: oftalmo
-      POSTGRES_PASSWORD: oftalmo
-      POSTGRES_DB: oftalmo
-    volumes:
-      - pg-data:/var/lib/postgresql/data
-
-volumes:
-  app-data:
-  pg-data:
-```
-
-### Environment Variables
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENROUTER_API_KEY` | Yes | OpenRouter API key for LLM access |
-| `SECRET_KEY` | Yes | Application secret for session encryption |
-| `DATABASE_URL` | No | PostgreSQL URL (defaults to SQLite) |
-| `PORT` | No | Server port (default: 8000) |
-| `ANTHROPIC_API_KEY` | No | Direct Anthropic API access |
-| `TELEGRAM_TOKEN` | No | Telegram bot token for gateway |
-| `WHATSAPP_TOKEN` | No | WhatsApp Cloud API token |
-| `FIRECRAWL_API_KEY` | No | Web scraping capabilities |
-| `LOG_LEVEL` | No | Logging level (default: INFO) |
+| Funcionalidade | Prioridade | Descricao |
+|---------------|-----------|-----------|
+| Analise de imagens com IA | Alta | Upload + interpretacao de OCT, fundoscopia |
+| Conexao com LLM | Alta | Integrar agente com OpenRouter/Anthropic |
+| Autenticacao real | Alta | Login com CRM, sessoes, permissoes |
+| Banco de dados real | Alta | Migrar de dados demo para PostgreSQL |
+| Notificacoes WhatsApp | Media | Alertas de novos casos via WhatsApp |
+| Gerador de laudos | Media | Templates por tipo de exame |
+| Protocolos clinicos | Media | Fluxogramas AAO, CBO, EURETINA |
+| Skills cirurgica + farmaco | Media | Facoemulsificacao, anti-VEGF, colirios |
+| DICOM | Baixa | Leitura de arquivos de equipamentos |
+| LGPD | Baixa | Anonimizacao, consentimento, audit trail |
 
 ---
 
-## Architecture
+<h2 id="segunda-opiniao">Sistema de Segunda Opiniao</h2>
+
+Permite que medicos enviem casos clinicos para consulta com outros especialistas.
+
+### Fluxo
 
 ```
-oftalmo-claw/
-├── main.py                          # Application entry point
-├── config.py                        # Configuration management
-├── requirements.txt                 # Python dependencies
-│
-├── agent/                           # Core AI agent
-│   ├── core.py                      # Agent loop & conversation
-│   ├── prompt_builder.py            # System prompt assembly
-│   ├── memory.py                    # Persistent memory (MEMORY.md)
-│   └── context_compressor.py        # Auto context compression
-│
-├── tools/                           # Agent tools (40+)
-│   ├── registry.py                  # Central tool registry
-│   ├── ophthalmo_image_tool.py      # Ophthalmic image analysis
-│   ├── ophthalmo_report_tool.py     # Report generation
-│   ├── ophthalmo_calc_tool.py       # Clinical calculators
-│   ├── second_opinion_tool.py       # Second opinion workflow
-│   ├── ophthalmo_analytics_tool.py  # Analytics & trends
-│   ├── clinical_protocol_tool.py    # Clinical protocols
-│   └── ...                          # Web, file, terminal, etc.
-│
-├── skills/                          # Domain knowledge (Markdown)
-│   └── ophthalmology/
-│       ├── core/SKILL.md            # Anatomy, pathology, terminology
-│       ├── imaging/SKILL.md         # OCT, fundoscopy, fields, topo
-│       ├── surgical/SKILL.md        # Surgical procedures
-│       ├── pharmacology/SKILL.md    # Ophthalmic drugs
-│       ├── second-opinion/SKILL.md  # Second opinion protocols
-│       └── analytics/SKILL.md       # Analytics queries
-│
-├── web/                             # Mission Control (Web UI)
-│   ├── app.py                       # FastAPI application
-│   ├── templates/                   # Jinja2 HTML templates
-│   │   ├── base.html                # Base layout (medical theme)
-│   │   ├── dashboard.html           # Main Mission Control
-│   │   ├── second_opinion.html      # Second Opinion page
-│   │   ├── trends.html              # Trends dashboard
-│   │   └── login.html               # Authentication
-│   └── static/
-│       ├── css/theme.css            # Medical color system
-│       └── js/                      # Frontend interactions
-│
-├── gateway/                         # Messaging platforms
-│   ├── run.py                       # Gateway server
-│   └── platforms/                   # Telegram, WhatsApp, etc.
-│
-├── models/                          # Database models
-│   ├── case.py                      # Second opinion cases
-│   ├── doctor.py                    # Specialist profiles
-│   ├── exam.py                      # Exam records
-│   └── analytics.py                 # Analytics aggregation
-│
-├── Dockerfile                       # Container definition
-├── railway.json                     # Railway deployment config
-├── Procfile                         # Process definitions
-└── .env.example                     # Environment template
+Medico A envia caso (imagens + historia clinica)
+        |
+Sistema identifica especialistas disponiveis
+        |
+IA gera rascunho de analise (opcional)
+        |
+Especialista B revisa e emite parecer
+        |
+Thread de discussao entre os medicos
+        |
+Caso encerrado com consenso final
 ```
 
-### Design Principles
+### Dados do caso
 
-1. **Agent-First** - The AI agent is the core. Everything else is a tool or interface.
-2. **Skills as Knowledge** - Medical knowledge is stored as Markdown skills, easy to update and version.
-3. **Tools as Actions** - Each capability (image analysis, calculators, reports) is a registered tool.
-4. **Memory Compounds** - The agent learns from every interaction, building expertise over time.
-5. **Platform Agnostic** - Same agent accessible via web, CLI, Telegram, WhatsApp, or any gateway.
+- **Paciente**: idade, sexo, historico relevante (anonimizado)
+- **Queixa principal**: descricao do problema
+- **Exames**: imagens anexadas (OCT, retinografia, campo visual, etc.)
+- **Hipotese diagnostica**: o que o medico solicitante suspeita
+- **Urgencia**: Normal, Urgente (24h), Emergencia (imediato)
+- **Especialidade**: Retina, Glaucoma, Cornea, Refrativa, Oculoplastica, Estrabismo, Neuro-oftalmo, Uveite
 
-### Color System
+### Especialidades e roteamento
 
-OftalmoClaw uses a medical-grade color palette:
-
-| Color | Hex | Usage |
-|-------|-----|-------|
-| **Teal** | `#0D9488` | Primary actions, success states |
-| **Navy** | `#1E3A5F` | Headers, navigation, authority |
-| **White** | `#FFFFFF` | Backgrounds, cards |
-| **Slate** | `#F1F5F9` | Secondary backgrounds |
-| **Coral** | `#EF4444` | Urgent, critical alerts |
-| **Amber** | `#F59E0B` | Warnings, pending states |
-| **Emerald** | `#10B981` | Online status, completed |
+| Especialidade | Quando encaminhar |
+|--------------|-------------------|
+| **Retina** | DMRI, retinopatia diabetica, RVO, descolamento, maculopatia |
+| **Glaucoma** | PIO elevada, dano no nervo optico, perda de campo visual |
+| **Cornea** | Ceratocone, infeccoes, ectasia, transplante |
+| **Refrativa** | Candidatura LASIK/PRK, ICL, surpresa refrativa |
+| **Oculoplastica** | Palpebras, vias lacrimais, orbita |
+| **Estrabismo** | Desalinhamento, diplopia |
+| **Neuro-oftalmo** | Neurite optica, papiledema, paralisia de nervos cranianos |
+| **Uveite** | Inflamacao intraocular, doencas autoimunes |
 
 ---
 
-## Skills
+<h2 id="dashboard-de-tendencias">Dashboard de Tendencias</h2>
 
-OftalmoClaw ships with specialized ophthalmology skills following the [agentskills.io](https://agentskills.io) standard.
+Visao macro do desempenho da clinica/servico.
 
-### Built-in Skills
+### Metricas disponiveis
 
-| Skill | Description |
-|-------|-------------|
-| `ophthalmology-core` | Anatomy, pathology, ICD-10, terminology, classifications |
-| `ophthalmology-imaging` | OCT, fundoscopy, topography, visual fields, angiography |
-| `ophthalmology-surgical` | Phaco, vitrectomy, refractive, MIGS, transplant |
-| `ophthalmology-pharmacology` | Eye drops, anti-VEGF, hypotensives, antibiotics |
-| `ophthalmology-second-opinion` | Collaborative case workflow protocols |
-| `ophthalmology-analytics` | Natural language analytics queries |
+- **Volume por periodo** - Quantidade de exames por semana/mes/trimestre/ano
+- **Score de qualidade** - Media por tipo de exame e por operador
+- **Performance por tipo de exame** - Fundoscopia, OCT, Campimetria, Topografia, Biometria
+- **Ranking de operadores** - Medicos ordenados por volume e qualidade
+- **Usuarios ativos** - Quantos medicos estao usando o sistema
+- **Segunda opiniao** - Casos pendentes, resolvidos, tempo medio de resposta
+- **Tempo de laudo** - Media entre exame e assinatura do laudo
 
-### Creating Custom Skills
+### Consulta por chat (com IA conectada)
 
-```markdown
----
-name: my-custom-skill
-description: Description of the skill
-version: 1.0.0
-author: Your Name
-license: MIT
-metadata:
-  hermes:
-    tags: [ophthalmology, custom]
-    category: ophthalmology
----
-
-# My Custom Skill
-
-Instructions for the agent on how to use this skill...
-```
-
----
-
-<h2 id="second-opinion">Second Opinion System</h2>
-
-The Second Opinion system enables real-time collaborative consultations between ophthalmology specialists.
-
-### How It Works
+Quando o agente de IA estiver configurado, voce podera perguntar em linguagem natural:
 
 ```
-1. Doctor A submits a case (images + clinical data)
-          |
-2. System routes to available specialist(s)
-          |
-3. AI generates draft analysis for specialist review
-          |
-4. Specialist B reviews, edits, and submits opinion
-          |
-5. Discussion thread opens for Q&A
-          |
-6. Case marked as resolved with final consensus
-```
-
-### Case Submission
-
-```python
-# Via agent chat
-"Submit a second opinion case for a 56-year-old female with
-suspected macular edema. Attaching OCT images."
-
-# Via API
-POST /api/v1/cases
-{
-  "patient": { "age": 56, "gender": "F" },
-  "history": "Progressive visual loss OS, DM2 for 10 years",
-  "images": ["oct_macula_os.dcm"],
-  "hypothesis": "Diabetic macular edema",
-  "urgency": "urgent",
-  "specialty_requested": "retina"
-}
-```
-
-### Specialist Dashboard
-
-- View pending cases assigned to you
-- See available specialists and their status (online/offline)
-- Open discussion threads with referring doctor
-- View attached images with zoom and annotation tools
-- Submit structured opinions with confidence levels
-
----
-
-<h2 id="dashboard">Trends Dashboard</h2>
-
-The Mission Control trends dashboard provides macro-level analytics for clinical operations.
-
-### Available Metrics
-
-- **Volume & Quality by Period** - Exam counts and quality scores over time
-- **Performance by Exam Type** - Fundoscopy, OCT, Visual Fields, Topography, Biometry
-- **Operator Rankings** - Doctors ranked by volume and quality score
-- **Active Users** - User engagement metrics
-- **Pathology Distribution** - Most common diagnoses
-- **Second Opinion Stats** - Pending, resolved, average turnaround time
-- **Report Turnaround** - Average time from exam to signed report
-
-### Query via Chat
-
-```
-"How many OCT exams were performed this month?"
-"Show me the top 5 operators by quality score"
-"What's the trend for fundoscopy volume in the last quarter?"
-"Export the monthly report as CSV"
+"Quantos OCTs fizemos este mes?"
+"Quem e o operador com melhor score de qualidade?"
+"Qual a tendencia de fundoscopias no ultimo trimestre?"
+"Exporta o relatorio mensal em CSV"
 ```
 
 ---
 
 ## API
 
-OftalmoClaw exposes a RESTful API for integration with external systems.
+O sistema expoe uma API REST para integracao com outros sistemas (prontuario, equipamentos, apps).
 
-### Authentication
+### Endpoints principais
 
-```bash
-curl -H "Authorization: Bearer YOUR_API_KEY" \
-     https://your-instance.railway.app/api/v1/health
+| Metodo | Endpoint | Descricao |
+|--------|----------|-----------|
+| `GET` | `/health` | Verifica se o sistema esta rodando |
+| `POST` | `/api/v1/chat` | Envia mensagem para o agente de IA |
+| `GET` | `/api/v1/cases` | Lista casos de segunda opiniao |
+| `POST` | `/api/v1/cases` | Cria novo caso |
+| `GET` | `/api/v1/cases/:id` | Detalhes de um caso |
+| `POST` | `/api/v1/cases/:id/opinions` | Envia parecer sobre um caso |
+| `GET` | `/api/v1/analytics/trends` | Dados de tendencias |
+| `GET` | `/api/v1/analytics/rankings` | Ranking de operadores |
+| `GET` | `/api/v1/calculators/iol` | Calculo de LIO (SRK/T) |
+| `GET` | `/api/v1/calculators/va-convert` | Conversao de acuidade visual |
+
+### Exemplo: Calcular LIO
+
+```
+GET /api/v1/calculators/iol?al=23.5&k1=43.0&k2=44.0&target=-0.5
+
+Resposta:
+{
+  "result": {
+    "iol_power": 20.55,
+    "formula": "SRK/T (simplified)",
+    "disclaimer": "For educational purposes only."
+  }
+}
 ```
 
-### Key Endpoints
+### Exemplo: Converter acuidade visual
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/health` | Health check |
-| `POST` | `/api/v1/chat` | Send message to agent |
-| `GET` | `/api/v1/cases` | List second opinion cases |
-| `POST` | `/api/v1/cases` | Create new case |
-| `GET` | `/api/v1/cases/:id` | Get case details |
-| `POST` | `/api/v1/cases/:id/opinions` | Submit opinion |
-| `GET` | `/api/v1/analytics/trends` | Get trends data |
-| `GET` | `/api/v1/analytics/rankings` | Get operator rankings |
-| `POST` | `/api/v1/images/analyze` | Analyze ophthalmic image |
-| `POST` | `/api/v1/reports/generate` | Generate exam report |
-| `GET` | `/api/v1/calculators/iol` | IOL calculation |
+```
+GET /api/v1/calculators/va-convert?snellen=20/40
 
-### Webhooks
-
-Configure webhooks for real-time notifications:
-
-```json
+Resposta:
 {
-  "url": "https://your-system.com/webhook",
-  "events": ["case.created", "opinion.submitted", "case.resolved"],
-  "secret": "your-webhook-secret"
+  "snellen": "20/40",
+  "decimal": 0.5,
+  "logmar": 0.3,
+  "category": "Mild vision loss"
 }
 ```
 
 ---
 
-## Roadmap
+<h2 id="instalacao-tecnica">Instalacao Tecnica (para desenvolvedores)</h2>
 
-- [x] Core agent with persistent memory
-- [x] Skills system (agentskills.io compatible)
-- [x] Multi-platform gateway (Telegram, WhatsApp, Discord, etc.)
-- [x] Railway deployment support
-- [ ] Ophthalmology core skills
-- [ ] Image analysis tool (OCT, fundoscopy, topography)
-- [ ] Second Opinion system
-- [ ] Mission Control web dashboard
-- [ ] Trends & analytics dashboard
-- [ ] Clinical calculators (IOL, VA conversion, IOP correction)
-- [ ] Report generator
-- [ ] Protocol engine
-- [ ] DICOM integration
-- [ ] EHR/FHIR interoperability
-- [ ] LGPD compliance module
-- [ ] Mobile-responsive Mission Control
+### Pre-requisitos
 
----
+- Python 3.11+
+- Git
+- Uma chave de API (OpenRouter ou Anthropic)
 
-## Contributing
-
-We welcome contributions from ophthalmologists, developers, and AI researchers.
-
-### How to Contribute
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/my-feature`)
-3. **Commit** your changes (`git commit -m 'Add my feature'`)
-4. **Push** to the branch (`git push origin feature/my-feature`)
-5. **Open** a Pull Request
-
-### Contribution Areas
-
-| Area | Skills Needed | Impact |
-|------|---------------|--------|
-| **Skills** | Ophthalmology knowledge | High |
-| **Tools** | Python, API development | High |
-| **Frontend** | HTML/CSS/JS, UI/UX | Medium |
-| **Docs** | Technical writing | Medium |
-| **Testing** | Python, pytest | Medium |
-| **Translations** | Portuguese, Spanish | Low |
-
-### Development Setup
+### Setup completo
 
 ```bash
+# Clonar
 git clone https://github.com/geekvision/oftalmo-claw.git
 cd oftalmo-claw
+
+# Ambiente virtual
 python -m venv .venv
 source .venv/bin/activate
+
+# Dependencias
 pip install -r requirements.txt
-pip install -r requirements-dev.txt
 
-# Run tests
-pytest
+# Configurar
+cp .env.example .env
+# Edite .env com suas chaves
 
-# Run linter
-ruff check .
+# Rodar
+python main.py
 ```
 
+### Modos de execucao
+
+```bash
+python main.py                  # Web (Mission Control) - padrao
+python main.py --mode cli       # Agente por linha de comando
+python main.py --mode gateway   # Gateway de mensagens (Telegram, WhatsApp)
+python main.py --setup          # Assistente de configuracao
+```
+
+### Deploy no Railway
+
+1. Faca fork deste repositorio no GitHub
+2. Crie conta em [railway.app](https://railway.app)
+3. New Project > Deploy from GitHub repo
+4. Adicione as variaveis de ambiente:
+
+| Variavel | Obrigatoria | Descricao |
+|----------|-------------|-----------|
+| `OPENROUTER_API_KEY` | Sim | Chave do OpenRouter para acesso a IA |
+| `SECRET_KEY` | Sim | Frase secreta para criptografia de sessao |
+| `DATABASE_URL` | Nao | URL do PostgreSQL (Railway provisiona automaticamente) |
+| `PORT` | Nao | Porta do servidor (padrao: 8000) |
+| `ANTHROPIC_API_KEY` | Nao | Chave da Anthropic (alternativa ao OpenRouter) |
+| `TELEGRAM_TOKEN` | Nao | Token do bot Telegram para notificacoes |
+| `WHATSAPP_TOKEN` | Nao | Token WhatsApp Cloud API |
+| `LOG_LEVEL` | Nao | Nivel de log: INFO, DEBUG, WARNING |
+
+5. Deploy automatico via Dockerfile incluido.
+
+### Docker local
+
+```bash
+docker build -t oftalmo-claw .
+
+docker run -d \
+  --name oftalmo-claw \
+  -p 8000:8000 \
+  -e OPENROUTER_API_KEY=sk-or-sua-chave \
+  -e SECRET_KEY=sua-frase-secreta \
+  -v oftalmo-data:/app/data \
+  oftalmo-claw
+```
+
+### Estrutura do projeto
+
+```
+oftalmo-claw/
+├── main.py                     # Ponto de entrada
+├── config.py                   # Configuracoes (.env)
+├── requirements.txt            # Dependencias Python
+│
+├── web/                        # Mission Control (interface web)
+│   ├── app.py                  # Aplicacao FastAPI
+│   ├── routes/                 # Rotas da API
+│   │   ├── dashboard.py        # Stats do painel principal
+│   │   ├── cases.py            # CRUD de casos (segunda opiniao)
+│   │   ├── analytics.py        # Tendencias e rankings
+│   │   └── api.py              # Chat, calculadoras
+│   ├── templates/              # Paginas HTML
+│   │   ├── base.html           # Layout base (sidebar, tema)
+│   │   ├── dashboard.html      # Mission Control
+│   │   ├── second_opinion.html # Segunda Opiniao
+│   │   ├── trends.html         # Dashboard de Tendencias
+│   │   └── login.html          # Tela de login
+│   └── static/
+│       ├── css/theme.css       # Tema medico (cores, componentes)
+│       └── js/app.js           # Interacoes frontend
+│
+├── agent/                      # Agente de IA
+│   └── core.py                 # Loop principal do agente
+│
+├── tools/                      # Ferramentas do agente
+│   └── registry.py             # Registro central de tools
+│
+├── skills/                     # Conhecimento (Markdown)
+│   └── ophthalmology/
+│       ├── core/SKILL.md       # Anatomia, patologias, CID-10
+│       ├── imaging/SKILL.md    # OCT, fundoscopia, campo visual
+│       ├── second-opinion/     # Protocolo de consulta
+│       └── analytics/          # Queries de analytics
+│
+├── models/                     # Modelos do banco de dados
+│   ├── database.py             # Conexao SQLAlchemy
+│   ├── case.py                 # Caso, Opiniao, Mensagem, Imagem
+│   ├── doctor.py               # Medico / Especialista
+│   └── exam.py                 # Registro de exame, snapshots
+│
+├── gateway/                    # Integracoes de mensagem
+│   └── platforms/              # Telegram, WhatsApp, etc.
+│
+├── Dockerfile                  # Container para deploy
+├── railway.json                # Config Railway
+├── Procfile                    # Processos (web + worker)
+└── .env.example                # Exemplo de configuracao
+```
+
+### Skills: como funcionam
+
+Skills sao arquivos Markdown que dao conhecimento especializado ao agente. Ficam em `skills/ophthalmology/` e seguem o padrao [agentskills.io](https://agentskills.io):
+
+```markdown
+---
+name: minha-skill
+description: O que esta skill ensina ao agente
+version: 1.0.0
+author: Seu Nome
+license: MIT
+metadata:
+  hermes:
+    tags: [ophthalmology, minha-area]
+    category: ophthalmology
 ---
 
-## Medical Disclaimer
+# Titulo
 
-> **OftalmoClaw is NOT a medical device.** It is intended for research, education, and clinical decision support only. It should NOT be used as a substitute for professional medical judgment. All diagnoses and treatment decisions must be made by qualified healthcare professionals. The AI-generated analyses and suggestions require mandatory review and validation by a licensed ophthalmologist before any clinical action.
+Conteudo que o agente vai "saber"...
+```
+
+**Skills incluidas:**
+
+| Skill | Conteudo |
+|-------|----------|
+| `core` | Anatomia ocular, patologias, CID-10, classificacoes (Shaffer, LOCS III, AREDS) |
+| `imaging` | Interpretacao de OCT, fundoscopia, campimetria, topografia, biometria |
+| `second-opinion` | Protocolo de consulta colaborativa, checklist, roteamento |
+| `analytics` | Queries em linguagem natural para o dashboard |
+
+**Para criar uma nova skill:** crie uma pasta em `skills/ophthalmology/` com um arquivo `SKILL.md` seguindo o formato acima.
 
 ---
 
-## License
+## Contribuindo
 
-MIT License - see [LICENSE](LICENSE) for details.
+Aceitamos contribuicoes de oftalmologistas, desenvolvedores e pesquisadores.
 
-**Attribution Required:** Any project using OftalmoClaw must include:
+### Como contribuir
+
+1. Faca **Fork** do repositorio
+2. Crie uma branch: `git checkout -b feature/minha-feature`
+3. Faca suas alteracoes e commit: `git commit -m 'Adiciona minha feature'`
+4. Push: `git push origin feature/minha-feature`
+5. Abra um **Pull Request**
+
+### Areas de contribuicao
+
+| Area | Perfil | Impacto |
+|------|--------|---------|
+| **Skills clinicas** | Oftalmologista | Alto - melhora diretamente o conhecimento da IA |
+| **Protocolos** | Oftalmologista | Alto - guidelines baseados em evidencia |
+| **Tools/API** | Desenvolvedor Python | Alto - novas funcionalidades |
+| **Frontend** | Desenvolvedor Web | Medio - melhorias na interface |
+| **Testes** | Desenvolvedor | Medio - estabilidade |
+| **Traducoes** | Qualquer | Baixo - acessibilidade |
+
+### Para oftalmologistas sem experiencia em codigo
+
+Voce pode contribuir sem programar:
+
+1. **Abra uma Issue** descrevendo uma funcionalidade que faria diferenca na sua pratica
+2. **Revise as skills** - leia os arquivos em `skills/ophthalmology/` e sugira correcoes ou adicoes
+3. **Teste o sistema** e reporte bugs ou sugestoes de melhoria
+4. **Compartilhe protocolos** que poderiam ser incluidos como skills
+
+---
+
+## Aviso Medico
+
+> **OftalmoClaw NAO e um dispositivo medico.** Destina-se exclusivamente a pesquisa, educacao e suporte a decisao clinica. NAO deve ser usado como substituto do julgamento medico profissional. Todos os diagnosticos e decisoes de tratamento devem ser feitos por profissionais de saude qualificados. As analises e sugestoes geradas por IA requerem revisao e validacao obrigatoria por oftalmologista habilitado antes de qualquer acao clinica.
+
+---
+
+## Licenca
+
+MIT License - veja [LICENSE](LICENSE) para detalhes.
+
+**Atribuicao obrigatoria:** qualquer projeto que use o OftalmoClaw deve incluir:
 
 > Built with OftalmoClaw by GeekVision
 
 ---
 
-## Acknowledgments
+## Agradecimentos
 
-- **[Hermes Agent](https://github.com/NousResearch/hermes-agent)** by Nous Research - Architectural foundation
-- **[agentskills.io](https://agentskills.io)** - Skill standard specification
-- The global ophthalmology community for domain expertise
+- **[Hermes Agent](https://github.com/NousResearch/hermes-agent)** da Nous Research - base arquitetural
+- **[agentskills.io](https://agentskills.io)** - padrao de skills
+- Comunidade global de oftalmologia
 
 ---
 
 <p align="center">
-  <strong>Built with care by <a href="https://github.com/geekvision">GeekVision</a></strong>
+  <strong>Feito com cuidado por <a href="https://github.com/geekvision">GeekVision</a></strong>
   <br />
-  <em>Empowering eye care with open-source AI</em>
+  <em>Empoderando o cuidado ocular com IA open-source</em>
   <br /><br />
-  <img src="https://img.shields.io/badge/ophthalmology-AI-0D9488?style=flat-square" />
-  <img src="https://img.shields.io/badge/open-source-1E3A5F?style=flat-square" />
-  <img src="https://img.shields.io/badge/made%20in-Brazil-10B981?style=flat-square" />
+  <img src="https://img.shields.io/badge/oftalmologia-IA-0D9488?style=flat-square" />
+  <img src="https://img.shields.io/badge/open--source-1E3A5F?style=flat-square" />
+  <img src="https://img.shields.io/badge/feito%20no-Brasil-10B981?style=flat-square" />
 </p>
+
+---
+
+<details>
+<summary><strong>English version (click to expand)</strong></summary>
+
+OftalmoClaw is an open-source, AI-powered ophthalmology mission control platform. It provides image analysis, second opinion workflows, clinical calculators, and a trends dashboard for eye care professionals.
+
+Built on [Hermes Agent](https://github.com/NousResearch/hermes-agent) architecture by Nous Research.
+
+For the full English documentation, see [docs/README_EN.md](docs/README_EN.md).
+
+</details>
