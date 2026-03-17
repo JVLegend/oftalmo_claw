@@ -3,10 +3,10 @@ OftalmoClaw - FastAPI Web Application (Mission Control)
 Created by GeekVision
 """
 
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -41,7 +41,7 @@ async def health():
     return {"status": "ok", "app": settings.app_name, "version": settings.app_version}
 
 
-# Main routes
+# Main routes (no login required)
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse("dashboard.html", {
@@ -56,7 +56,7 @@ async def index(request: Request):
 async def second_opinion_page(request: Request):
     return templates.TemplateResponse("second_opinion.html", {
         "request": request,
-        "title": "Segunda Opiniao",
+        "title": "Segunda Opinião",
         "app_name": settings.app_name,
     })
 
@@ -65,16 +65,7 @@ async def second_opinion_page(request: Request):
 async def trends_page(request: Request):
     return templates.TemplateResponse("trends.html", {
         "request": request,
-        "title": "Dashboard de Tendencias",
-        "app_name": settings.app_name,
-    })
-
-
-@app.get("/login", response_class=HTMLResponse)
-async def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {
-        "request": request,
-        "title": "Login",
+        "title": "Dashboard de Tendências",
         "app_name": settings.app_name,
     })
 

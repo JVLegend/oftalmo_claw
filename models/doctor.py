@@ -12,7 +12,7 @@ class Doctor(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(200), nullable=False)
     email = Column(String(200), unique=True, nullable=False)
-    crm = Column(String(20), nullable=True)  # Brazilian medical license
+    crm = Column(String(20), nullable=True)
     specialty = Column(SQLEnum(Specialty), default=Specialty.GENERAL)
     institution = Column(String(200), nullable=True)
     avatar_url = Column(String(500), nullable=True)
@@ -21,8 +21,7 @@ class Doctor(Base):
     is_online = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
 
-    # Auth
-    password_hash = Column(String(200), nullable=False)
+    password_hash = Column(String(200), nullable=False, default="demo")
 
     created_at = Column(DateTime, default=datetime.utcnow)
     last_seen = Column(DateTime, default=datetime.utcnow)
@@ -39,13 +38,25 @@ class Doctor(Base):
         labels = {
             "retina": "Retina",
             "glaucoma": "Glaucoma",
-            "cornea": "Cornea",
+            "cornea": "Córnea",
             "refractive": "Refrativa",
-            "oculoplastics": "Oculoplastica",
+            "oculoplastics": "Oculoplástica",
             "strabismus": "Estrabismo",
             "neuro_ophthalmology": "Neuro-Oftalmo",
-            "pediatric": "Pediatrica",
-            "uveitis": "Uveite",
+            "pediatric": "Pediátrica",
+            "uveitis": "Uveíte",
             "general": "Geral",
         }
         return labels.get(self.specialty.value if self.specialty else "general", "Geral")
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "email": self.email,
+            "crm": self.crm,
+            "specialty": self.display_specialty,
+            "initials": self.initials,
+            "is_online": self.is_online,
+            "is_active": self.is_active,
+        }

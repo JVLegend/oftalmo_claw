@@ -29,7 +29,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Criado%20por-GeekVision-1E3A5F?style=for-the-badge" />
+  <a href="https://www.instagram.com/geekvisionbr/"><img src="https://img.shields.io/badge/Criado%20por-GeekVision-1E3A5F?style=for-the-badge" /></a>
 </p>
 
 ---
@@ -337,14 +337,15 @@ O projeto inclui um arquivo `CLAUDE.md` na raiz que dá contexto ao Claude Code 
 
 | Funcionalidade | Status | Descrição |
 |---------------|--------|-----------|
-| Mission Control | MVP | Dashboard principal com stats e acesso rápido |
-| Segunda Opinião | MVP | Interface de casos, especialistas, urgência |
-| Dashboard Tendências | MVP | Volume, qualidade, rankings (dados demo) |
+| Mission Control | Pronto | Dashboard com stats reais do banco de dados |
+| Segunda Opinião | Pronto | CRUD completo de casos, opiniões, mensagens, especialistas |
+| Dashboard Tendências | Pronto | Volume, qualidade, rankings — dados reais do banco |
+| Conexão com LLM | Pronto | Chat com OpenRouter, Anthropic (Claude) e OpenAI (ChatGPT) |
+| Banco de dados real | Pronto | SQLite (local) / PostgreSQL (Railway) com seed de dados demo |
 | Skills Oftalmológicas | Parcial | Core e Imaging completos, outros em andamento |
-| Calculadora IOL | MVP | SRK/T simplificado via API |
+| Calculadora IOL | Pronto | SRK/T simplificado via API |
 | Conversor Acuidade | Pronto | Snellen, decimal, LogMAR |
-| Login | UI | Tela pronta, autenticação em desenvolvimento |
-| API REST | MVP | Endpoints para cases, analytics, calculadoras |
+| API REST | Pronto | 15+ endpoints para cases, analytics, chat, calculadoras |
 | Deploy Railway | Pronto | Dockerfile + railway.json configurados |
 | Modo offline | Pronto | Roda local com SQLite, sem precisar de servidor |
 
@@ -353,9 +354,7 @@ O projeto inclui um arquivo `CLAUDE.md` na raiz que dá contexto ao Claude Code 
 | Funcionalidade | Prioridade | Descrição |
 |---------------|-----------|-----------|
 | Análise de imagens com IA | Alta | Upload + interpretação de OCT, fundoscopia |
-| Conexão com LLM | Alta | Integrar agente com OpenRouter/Anthropic/OpenAI |
-| Autenticação real | Alta | Login com CRM, sessões, permissões |
-| Banco de dados real | Alta | Migrar de dados demo para PostgreSQL |
+| Autenticação real | Média | Login com CRM, sessões, permissões |
 | Notificações WhatsApp | Média | Alertas de novos casos via WhatsApp |
 | Gerador de laudos | Média | Templates por tipo de exame |
 | Protocolos clínicos | Média | Fluxogramas AAO, CBO, EURETINA |
@@ -448,10 +447,16 @@ O sistema expõe uma API REST para integração com outros sistemas (prontuário
 | `POST` | `/api/v1/chat` | Envia mensagem para o agente de IA |
 | `GET` | `/api/v1/cases` | Lista casos de segunda opinião |
 | `POST` | `/api/v1/cases` | Cria novo caso |
-| `GET` | `/api/v1/cases/:id` | Detalhes de um caso |
+| `GET` | `/api/v1/cases/:id` | Detalhes completos (opiniões, mensagens, imagens) |
 | `POST` | `/api/v1/cases/:id/opinions` | Envia parecer sobre um caso |
-| `GET` | `/api/v1/analytics/trends` | Dados de tendências |
+| `POST` | `/api/v1/cases/:id/messages` | Envia mensagem na discussão do caso |
+| `PATCH` | `/api/v1/cases/:id/status` | Atualiza status do caso |
+| `GET` | `/api/v1/cases/specialists` | Lista especialistas com casos ativos |
+| `GET` | `/api/v1/dashboard/stats` | Stats do Mission Control (tempo real) |
+| `GET` | `/api/v1/analytics/trends` | Tendências de volume e qualidade |
+| `GET` | `/api/v1/analytics/by-exam-type` | Performance por tipo de exame |
 | `GET` | `/api/v1/analytics/rankings` | Ranking de operadores |
+| `GET` | `/api/v1/analytics/summary` | Resumo geral do sistema |
 | `GET` | `/api/v1/calculators/iol` | Cálculo de LIO (SRK/T) |
 | `GET` | `/api/v1/calculators/va-convert` | Conversão de acuidade visual |
 
@@ -695,7 +700,7 @@ MIT License — veja [LICENSE](LICENSE) para detalhes.
 ---
 
 <p align="center">
-  <strong>Feito com cuidado por <a href="https://github.com/geekvision">GeekVision</a></strong>
+  <strong>Feito com cuidado por <a href="https://www.instagram.com/geekvisionbr/">GeekVision</a></strong>
   <br />
   <em>Empoderando o cuidado ocular com IA open-source</em>
   <br /><br />
