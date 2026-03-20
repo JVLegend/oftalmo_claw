@@ -1,84 +1,29 @@
 {% extends "base.html" %}
 
-{% block page_title %}Dashboard de Tendencias{% endblock %}
-{% block page_subtitle %}Analise de evolucao e performance ao longo do tempo{% endblock %}
-
-{% block topbar_actions %}
-<button class="btn btn-sm btn-outline">&#9707; Filtros</button>
-<button class="btn btn-sm btn-coral">&#11015; Exportar</button>
-{% endblock %}
+{% block page_title %}Tendências{% endblock %}
+{% block page_subtitle %}Acompanhe o volume de exames e a qualidade ao longo do tempo{% endblock %}
 
 {% block content %}
-<!-- Period Tabs -->
-<div class="filter-bar">
-    <div class="tabs">
-        <button class="tab" onclick="setPeriod('week', this)">Semana</button>
-        <button class="tab active" onclick="setPeriod('month', this)">Mes</button>
-        <button class="tab" onclick="setPeriod('quarter', this)">Trimestre</button>
-        <button class="tab" onclick="setPeriod('year', this)">Ano</button>
+
+<!-- Intro -->
+<div class="intro-box" id="trends-intro">
+    <div class="intro-icon">&#128200;</div>
+    <div>
+        <strong>O que é isso?</strong>
+        Esta página mostra quantos exames foram feitos, a qualidade média e quem são os médicos com melhor desempenho.
+        Os dados vêm do banco de dados do sistema e são atualizados em tempo real.
     </div>
+    <button class="intro-dismiss" onclick="this.parentElement.style.display='none';localStorage.setItem('trends_intro_hidden','1');">✕</button>
 </div>
 
 <!-- Volume Chart -->
 <div class="card" style="margin-bottom: 24px;">
     <div class="card-header">
-        <div class="card-title">Volume e Qualidade por Mes</div>
+        <div class="card-title">&#128202; Volume de exames e qualidade por mês</div>
+        <div style="font-size:12px;color:var(--slate-400);">Últimos 6 meses</div>
     </div>
     <div class="card-body" id="volume-chart">
-        <div class="chart-bar-row">
-            <div class="chart-label">Jul</div>
-            <div class="chart-bar-container">
-                <div class="chart-bar" style="width: 46.5%;">
-                    <span class="chart-bar-value">145</span>
-                </div>
-            </div>
-            <div class="chart-score">85.2 <small>score</small></div>
-        </div>
-        <div class="chart-bar-row">
-            <div class="chart-label">Ago</div>
-            <div class="chart-bar-container">
-                <div class="chart-bar" style="width: 57.1%;">
-                    <span class="chart-bar-value">178</span>
-                </div>
-            </div>
-            <div class="chart-score">86.1 <small>score</small></div>
-        </div>
-        <div class="chart-bar-row">
-            <div class="chart-label">Set</div>
-            <div class="chart-bar-container">
-                <div class="chart-bar" style="width: 65.1%;">
-                    <span class="chart-bar-value">203</span>
-                </div>
-            </div>
-            <div class="chart-score">87.8 <small>score</small></div>
-        </div>
-        <div class="chart-bar-row">
-            <div class="chart-label">Out</div>
-            <div class="chart-bar-container">
-                <div class="chart-bar" style="width: 79.2%;">
-                    <span class="chart-bar-value">247</span>
-                </div>
-            </div>
-            <div class="chart-score">88.5 <small>score</small></div>
-        </div>
-        <div class="chart-bar-row">
-            <div class="chart-label">Nov</div>
-            <div class="chart-bar-container">
-                <div class="chart-bar" style="width: 92.6%;">
-                    <span class="chart-bar-value">289</span>
-                </div>
-            </div>
-            <div class="chart-score">89.2 <small>score</small></div>
-        </div>
-        <div class="chart-bar-row">
-            <div class="chart-label">Dez</div>
-            <div class="chart-bar-container">
-                <div class="chart-bar" style="width: 100%;">
-                    <span class="chart-bar-value">312</span>
-                </div>
-            </div>
-            <div class="chart-score">90.1 <small>score</small></div>
-        </div>
+        <div style="text-align:center;padding:24px;color:var(--slate-400);">Carregando gráfico...</div>
     </div>
 </div>
 
@@ -87,62 +32,14 @@
     <!-- Performance by Exam Type -->
     <div class="card">
         <div class="card-header">
-            <div class="card-title">Performance por Tipo de Exame</div>
+            <div class="card-title">&#128065; Por tipo de exame</div>
         </div>
-        <div class="card-body" id="exam-types">
-            <div class="exam-type-row">
-                <div class="exam-type-header">
-                    <span class="exam-type-name">Fundoscopia</span>
-                    <span><span class="exam-type-stats">542 exames</span> &nbsp; <span class="exam-type-score">91.2</span></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 91.2%;"></div>
-                </div>
-            </div>
-            <div class="exam-type-row">
-                <div class="exam-type-header">
-                    <span class="exam-type-name">OCT</span>
-                    <span><span class="exam-type-stats">389 exames</span> &nbsp; <span class="exam-type-score">88.7</span></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 88.7%;"></div>
-                </div>
-            </div>
-            <div class="exam-type-row">
-                <div class="exam-type-header">
-                    <span class="exam-type-name">Campimetria</span>
-                    <span><span class="exam-type-stats">276 exames</span> &nbsp; <span class="exam-type-score">85.4</span></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 85.4%;"></div>
-                </div>
-            </div>
-            <div class="exam-type-row">
-                <div class="exam-type-header">
-                    <span class="exam-type-name">Topografia</span>
-                    <span><span class="exam-type-stats">198 exames</span> &nbsp; <span class="exam-type-score">90.3</span></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 90.3%;"></div>
-                </div>
-            </div>
-            <div class="exam-type-row">
-                <div class="exam-type-header">
-                    <span class="exam-type-name">Biometria</span>
-                    <span><span class="exam-type-stats">167 exames</span> &nbsp; <span class="exam-type-score">92.1</span></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 92.1%;"></div>
-                </div>
-            </div>
-            <div class="exam-type-row">
-                <div class="exam-type-header">
-                    <span class="exam-type-name">Retinografia</span>
-                    <span><span class="exam-type-stats">134 exames</span> &nbsp; <span class="exam-type-score">87.9</span></span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 87.9%;"></div>
-                </div>
+        <div class="card-body">
+            <p style="font-size:12px;color:var(--slate-400);margin-bottom:16px;">
+                A barra mostra o score de qualidade médio (0–100). Quanto mais longa, melhor.
+            </p>
+            <div id="exam-types">
+                <div style="text-align:center;padding:16px;color:var(--slate-400);">Carregando...</div>
             </div>
         </div>
     </div>
@@ -150,63 +47,14 @@
     <!-- Operator Rankings -->
     <div class="card">
         <div class="card-header">
-            <div class="card-title">Ranking de Operadores</div>
+            <div class="card-title">&#127942; Ranking de operadores</div>
         </div>
-        <div class="card-body" id="rankings">
-            <div class="ranking-row">
-                <div class="ranking-number gold">1</div>
-                <div class="ranking-info">
-                    <div class="ranking-name">Dr. Carlos Silva</div>
-                    <div class="ranking-exams">234 exames realizados</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="ranking-score">92.1</div>
-                    <div class="ranking-trend">+5.2%</div>
-                </div>
-            </div>
-            <div class="ranking-row">
-                <div class="ranking-number silver">2</div>
-                <div class="ranking-info">
-                    <div class="ranking-name">Dra. Ana Oliveira</div>
-                    <div class="ranking-exams">198 exames realizados</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="ranking-score">91.8</div>
-                    <div class="ranking-trend">+3.1%</div>
-                </div>
-            </div>
-            <div class="ranking-row">
-                <div class="ranking-number bronze">3</div>
-                <div class="ranking-info">
-                    <div class="ranking-name">Dr. Roberto Costa</div>
-                    <div class="ranking-exams">176 exames realizados</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="ranking-score">90.5</div>
-                    <div class="ranking-trend">+2.8%</div>
-                </div>
-            </div>
-            <div class="ranking-row">
-                <div class="ranking-number default">4</div>
-                <div class="ranking-info">
-                    <div class="ranking-name">Dra. Maria Santos</div>
-                    <div class="ranking-exams">165 exames realizados</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="ranking-score">89.7</div>
-                    <div class="ranking-trend">+4.5%</div>
-                </div>
-            </div>
-            <div class="ranking-row">
-                <div class="ranking-number default">5</div>
-                <div class="ranking-info">
-                    <div class="ranking-name">Dr. Paulo Mendes</div>
-                    <div class="ranking-exams">143 exames realizados</div>
-                </div>
-                <div style="text-align:right;">
-                    <div class="ranking-score">88.2</div>
-                    <div class="ranking-trend">+1.9%</div>
-                </div>
+        <div class="card-body">
+            <p style="font-size:12px;color:var(--slate-400);margin-bottom:16px;">
+                Ordenado pela qualidade média dos exames realizados.
+            </p>
+            <div id="rankings">
+                <div style="text-align:center;padding:16px;color:var(--slate-400);">Carregando...</div>
             </div>
         </div>
     </div>
@@ -214,11 +62,102 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-function setPeriod(period, el) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    // TODO: fetch /api/v1/analytics/trends?period=${period} and update chart
+<style>
+.intro-box {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 24px;
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--slate-600);
+    line-height: 1.6;
 }
+.intro-icon { font-size: 24px; flex-shrink: 0; }
+.intro-dismiss {
+    background: none; border: none; font-size: 16px;
+    color: var(--slate-400); cursor: pointer; flex-shrink: 0; padding: 4px;
+}
+.intro-dismiss:hover { color: var(--slate-600); }
+</style>
+
+<script>
+// Hide intro if dismissed
+if (localStorage.getItem('trends_intro_hidden')) {
+    document.getElementById('trends-intro').style.display = 'none';
+}
+
+// Load trends chart
+fetch('/api/v1/analytics/trends')
+    .then(r => r.json())
+    .then(data => {
+        const chart = document.getElementById('volume-chart');
+        const maxVol = Math.max(...data.data.map(d => d.volume));
+
+        chart.innerHTML = data.data.map(d => {
+            const pct = Math.round((d.volume / maxVol) * 100);
+            return `
+            <div class="chart-bar-row">
+                <div class="chart-label">${d.label}</div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar" style="width: ${pct}%;">
+                        <span class="chart-bar-value">${d.volume}</span>
+                    </div>
+                </div>
+                <div class="chart-score">${d.quality_score} <small>score</small></div>
+            </div>`;
+        }).join('');
+
+        // Animate
+        setTimeout(() => {
+            document.querySelectorAll('.chart-bar').forEach(bar => {
+                bar.style.transition = 'width 0.8s ease';
+            });
+        }, 50);
+    });
+
+// Load exam types
+fetch('/api/v1/analytics/by-exam-type')
+    .then(r => r.json())
+    .then(data => {
+        const el = document.getElementById('exam-types');
+        el.innerHTML = data.exam_types.map(e => `
+            <div class="exam-type-row">
+                <div class="exam-type-header">
+                    <span class="exam-type-name">${e.type}</span>
+                    <span><span class="exam-type-stats">${e.count} exames</span> &nbsp; <span class="exam-type-score">${e.quality_score}</span></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${e.quality_score}%;"></div>
+                </div>
+            </div>
+        `).join('');
+    });
+
+// Load rankings
+fetch('/api/v1/analytics/rankings')
+    .then(r => r.json())
+    .then(data => {
+        const el = document.getElementById('rankings');
+        const medals = ['gold', 'silver', 'bronze'];
+        el.innerHTML = data.rankings.map(r => {
+            const cls = medals[r.rank - 1] || 'default';
+            return `
+            <div class="ranking-row">
+                <div class="ranking-number ${cls}">${r.rank}</div>
+                <div class="ranking-info">
+                    <div class="ranking-name">${r.name}</div>
+                    <div class="ranking-exams">${r.exams} exames realizados</div>
+                </div>
+                <div style="text-align:right;">
+                    <div class="ranking-score">${r.quality_score}</div>
+                </div>
+            </div>`;
+        }).join('');
+    });
 </script>
 {% endblock %}
