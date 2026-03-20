@@ -70,6 +70,24 @@ async def trends_page(request: Request):
     })
 
 
+@app.get("/calculators", response_class=HTMLResponse)
+async def calculators_page(request: Request):
+    return templates.TemplateResponse("calculators.html", {
+        "request": request,
+        "title": "Calculadoras",
+        "app_name": settings.app_name,
+    })
+
+
+@app.get("/chat", response_class=HTMLResponse)
+async def chat_page(request: Request):
+    return templates.TemplateResponse("chat.html", {
+        "request": request,
+        "title": "Chat IA",
+        "app_name": settings.app_name,
+    })
+
+
 # Include API routers
 app.include_router(dashboard.router, prefix="/api/v1/dashboard", tags=["dashboard"])
 app.include_router(cases.router, prefix="/api/v1/cases", tags=["cases"])

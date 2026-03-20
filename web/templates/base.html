@@ -44,34 +44,31 @@
 
             <div class="nav-section">
                 <div class="nav-section-title">Ferramentas</div>
-                <a href="#" class="nav-item">
-                    <span class="icon">&#128065;</span> Analise de Imagens
-                </a>
-                <a href="#" class="nav-item">
-                    <span class="icon">&#9998;</span> Laudos
-                </a>
-                <a href="#" class="nav-item">
+                <a href="/calculators" class="nav-item {% if title == 'Calculadoras' %}active{% endif %}">
                     <span class="icon">&#8721;</span> Calculadoras
                 </a>
-                <a href="#" class="nav-item">
-                    <span class="icon">&#9883;</span> Protocolos
+                <a href="/chat" class="nav-item {% if title == 'Chat IA' %}active{% endif %}">
+                    <span class="icon">&#128172;</span> Chat com IA
                 </a>
             </div>
 
             <div class="nav-section">
-                <div class="nav-section-title">Sistema</div>
-                <a href="#" class="nav-item">
-                    <span class="icon">&#9881;</span> Configuracoes
+                <div class="nav-section-title">Em breve</div>
+                <a class="nav-item" style="opacity:0.4;cursor:default;">
+                    <span class="icon">&#128065;</span> Análise de Imagens
                 </a>
-                <a href="#" class="nav-item">
-                    <span class="icon">&#128100;</span> Usuarios
+                <a class="nav-item" style="opacity:0.4;cursor:default;">
+                    <span class="icon">&#9998;</span> Laudos
+                </a>
+                <a class="nav-item" style="opacity:0.4;cursor:default;">
+                    <span class="icon">&#9883;</span> Protocolos
                 </a>
             </div>
         </nav>
 
         <div class="sidebar-footer">
             OftalmoClaw v{{ version or '0.1.0' }}<br>
-            <a href="https://github.com/geekvision">GeekVision</a> &bull; Open Source
+            <a href="https://www.instagram.com/geekvisionbr/">GeekVision</a> &bull; Open Source
         </div>
     </aside>
 
