@@ -247,24 +247,41 @@ Acesse `http://localhost:8000`.
 
 ### O que você vai ver
 
-Ao abrir o sistema, você terá acesso a:
+Ao abrir o sistema pela primeira vez, um banner de boas-vindas explica o que cada seção faz. Você terá acesso a:
 
 **Mission Control (página principal)**
-- Resumo do dia: exames realizados, casos pendentes, especialistas online
-- Acesso rápido a todas as ferramentas
-- Últimos casos de segunda opinião
+- Banner de boas-vindas na primeira visita (some depois)
+- 4 cards guiados: "Perguntar à IA", "Pedir Segunda Opinião", "Calculadoras", "Tendências"
+- Resumo do dia colapsável: exames, casos pendentes, especialistas online
+- Busca global na topbar (caso, paciente, médico)
+- Notificações com badge de casos pendentes
+- Perfil do usuário com menu dropdown
 
 **Segunda Opinião**
-- Lista de casos pendentes com nível de urgência
-- Painel de especialistas disponíveis (Retina, Glaucoma, Córnea...)
-- Discussão por caso com histórico completo
-- Upload de imagens (OCT, retinografia, etc.)
+- Formulário completo para criar novo caso (modal com 10 campos)
+- Lista de casos com cards clicáveis → abre modal de detalhe
+- Timeline visual com opiniões e discussão
+- Painel de especialistas com status online/offline
+- Card de dicas para primeiro uso
+
+**Chat com IA**
+- 5 sugestões rápidas clicáveis (chips) para começar sem digitar
+- Renderização de markdown nas respostas (bold, code, listas)
+- Timestamps em cada mensagem
+- Suporte a OpenRouter, Anthropic e OpenAI
+
+**Calculadoras Clínicas**
+- LIO (SRK/T): com validação de range clínico
+- Conversor de acuidade visual: Snellen ↔ Decimal ↔ LogMAR
+- Correção de PIO por paquimetria (Ehlers)
+- Botão "Imprimir resultado" com layout otimizado
+- Tabela de referência rápida
 
 **Dashboard de Tendências**
-- Volume de exames por período (semana/mês/trimestre/ano)
+- Volume de exames por mês com gráfico de barras
 - Score de qualidade por tipo de exame
-- Ranking de operadores por produtividade e qualidade
-- Exportação para CSV/PDF
+- Ranking de operadores com medalhas
+- Dados carregados em tempo real da API
 
 ---
 
@@ -337,17 +354,22 @@ O projeto inclui um arquivo `CLAUDE.md` na raiz que dá contexto ao Claude Code 
 
 | Funcionalidade | Status | Descrição |
 |---------------|--------|-----------|
-| Mission Control | Pronto | Dashboard com stats reais do banco de dados |
-| Segunda Opinião | Pronto | CRUD completo de casos, opiniões, mensagens, especialistas |
-| Dashboard Tendências | Pronto | Volume, qualidade, rankings — dados reais do banco |
-| Conexão com LLM | Pronto | Chat com OpenRouter, Anthropic (Claude) e OpenAI (ChatGPT) |
-| Banco de dados real | Pronto | SQLite (local) / PostgreSQL (Railway) com seed de dados demo |
-| Skills Oftalmológicas | Parcial | Core e Imaging completos, outros em andamento |
-| Calculadora IOL | Pronto | SRK/T simplificado via API |
-| Conversor Acuidade | Pronto | Snellen, decimal, LogMAR |
-| API REST | Pronto | 15+ endpoints para cases, analytics, chat, calculadoras |
-| Deploy Railway | Pronto | Dockerfile + railway.json configurados |
-| Modo offline | Pronto | Roda local com SQLite, sem precisar de servidor |
+| Mission Control | ✅ Pronto | Dashboard com boas-vindas, cards guiados, stats colapsáveis |
+| Segunda Opinião | ✅ Pronto | Formulário completo, modal de detalhe com timeline, busca |
+| Chat com IA | ✅ Pronto | Sugestões rápidas, markdown, timestamps, multi-provedor |
+| Calculadoras Clínicas | ✅ Pronto | LIO (SRK/T), conversor AV, correção PIO — com validação e print |
+| Dashboard Tendências | ✅ Pronto | Volume, qualidade, rankings — dados reais do banco |
+| Banco de dados real | ✅ Pronto | SQLite (local) / PostgreSQL (Railway) com seed de dados demo |
+| API REST | ✅ Pronto | 15+ endpoints para cases, analytics, chat, calculadoras |
+| PWA | ✅ Pronto | Instalável em tablet/celular, ícones, manifest.json |
+| Toast Notifications | ✅ Pronto | Feedback visual em todas as ações (sucesso/erro/aviso) |
+| Busca Global | ✅ Pronto | Busca por caso, paciente, médico na topbar |
+| Topbar Profissional | ✅ Pronto | Perfil do usuário, notificações com badge, busca |
+| Mobile Responsivo | ✅ Pronto | Menu hamburger, sidebar overlay, layout adaptável |
+| Impressão | ✅ Pronto | Botão imprimir nas calculadoras com layout otimizado |
+| Skills Oftalmológicas | 🔄 Parcial | Core e Imaging completos, outros em andamento |
+| Deploy Railway | ✅ Pronto | Dockerfile + railway.json configurados |
+| Modo offline | ✅ Pronto | Roda local com SQLite, sem precisar de servidor |
 
 ### Em desenvolvimento
 
@@ -361,6 +383,8 @@ O projeto inclui um arquivo `CLAUDE.md` na raiz que dá contexto ao Claude Code 
 | Skills cirúrgica + farmaco | Média | Facoemulsificação, anti-VEGF, colírios |
 | DICOM | Baixa | Leitura de arquivos de equipamentos |
 | LGPD | Baixa | Anonimização, consentimento, audit trail |
+
+> **Documentação completa:** veja [docs/FUNCIONALIDADES.md](docs/FUNCIONALIDADES.md) para detalhes de cada feature e [CHANGELOG.md](CHANGELOG.md) para o histórico de melhorias.
 
 ---
 
@@ -569,14 +593,18 @@ oftalmo-claw/
 │   │   ├── analytics.py        # Tendências e rankings
 │   │   └── api.py              # Chat, calculadoras
 │   ├── templates/              # Páginas HTML
-│   │   ├── base.html           # Layout base (sidebar, tema)
-│   │   ├── dashboard.html      # Mission Control
-│   │   ├── second_opinion.html # Segunda Opinião
+│   │   ├── base.html           # Layout (sidebar, topbar, toast, PWA)
+│   │   ├── dashboard.html      # Mission Control (boas-vindas, cards)
+│   │   ├── second_opinion.html # Segunda Opinião (form, detalhe, timeline)
 │   │   ├── trends.html         # Dashboard de Tendências
+│   │   ├── calculators.html    # Calculadoras (LIO, AV, PIO)
+│   │   ├── chat.html           # Chat com IA (sugestões, markdown)
 │   │   └── login.html          # Tela de login
 │   └── static/
-│       ├── css/theme.css       # Tema médico (cores, componentes)
-│       └── js/app.js           # Interações frontend
+│       ├── css/theme.css       # Tema médico (~1150 linhas: modal, toast, skeleton, etc.)
+│       ├── js/app.js           # Interações (~230 linhas: toast, search, modal, markdown)
+│       ├── manifest.json       # PWA manifest (instalável)
+│       └── images/             # Favicon SVG + ícones PWA (192px, 512px)
 │
 ├── agent/                      # Agente de IA
 │   └── core.py                 # Loop principal do agente
