@@ -11,32 +11,36 @@
             <div class="card-title">&#8721; Calculadora de LIO (SRK/T)</div>
         </div>
         <div class="card-body">
-            <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 16px;">
+            <p class="text-muted text-small mb-md">
                 Cálculo simplificado da lente intraocular pela fórmula SRK/T.
             </p>
-            <form id="iol-form" style="display:flex;flex-direction:column;gap:12px;">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
+            <form id="iol-form" class="flex-col-gap">
+                <div class="form-grid">
+                    <div class="form-group">
                         <label class="form-label">Comprimento Axial (mm)</label>
-                        <input type="number" step="0.01" value="23.50" id="iol-al" class="form-input">
+                        <input type="number" step="0.01" value="23.50" id="iol-al" class="form-input" min="15" max="40">
+                        <div class="form-error" id="iol-al-err">Valor deve estar entre 15 e 40 mm</div>
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="form-label">K1 (D)</label>
-                        <input type="number" step="0.01" value="43.00" id="iol-k1" class="form-input">
+                        <input type="number" step="0.01" value="43.00" id="iol-k1" class="form-input" min="35" max="55">
+                        <div class="form-error" id="iol-k1-err">Valor deve estar entre 35 e 55 D</div>
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="form-label">K2 (D)</label>
-                        <input type="number" step="0.01" value="44.00" id="iol-k2" class="form-input">
+                        <input type="number" step="0.01" value="44.00" id="iol-k2" class="form-input" min="35" max="55">
+                        <div class="form-error" id="iol-k2-err">Valor deve estar entre 35 e 55 D</div>
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="form-label">Refração Alvo (D)</label>
-                        <input type="number" step="0.25" value="-0.50" id="iol-target" class="form-input">
+                        <input type="number" step="0.25" value="-0.50" id="iol-target" class="form-input" min="-10" max="10">
+                        <div class="form-error" id="iol-target-err">Valor deve estar entre -10 e +10 D</div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="justify-content:center;">Calcular</button>
+                <button type="submit" class="btn btn-primary justify-center">Calcular</button>
             </form>
 
-            <div id="iol-result" style="display:none;margin-top:16px;">
+            <div id="iol-result" style="display:none;" class="mt-md">
                 <div class="stat-card" style="background:var(--teal-50);border:1px solid var(--primary);">
                     <div>
                         <div class="stat-label">Poder da LIO</div>
@@ -44,9 +48,10 @@
                         <div class="stat-label">Dioptrias</div>
                     </div>
                 </div>
-                <div style="margin-top:8px;padding:10px;background:var(--amber-50);border-radius:8px;font-size:0.8rem;color:var(--amber-600);">
-                    ⚠️ Apenas para fins educacionais. Use software de biometria certificado para decisões clínicas.
+                <div class="disclaimer-box mt-sm">
+                    &#9888;&#65039; Apenas para fins educacionais. Use software de biometria certificado para decisões clínicas.
                 </div>
+                <button type="button" class="print-btn mt-sm no-print" onclick="window.print()">&#128424; Imprimir resultado</button>
             </div>
         </div>
     </div>
@@ -57,10 +62,10 @@
             <div class="card-title">&#128065; Conversor de Acuidade Visual</div>
         </div>
         <div class="card-body">
-            <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 16px;">
+            <p class="text-muted text-small mb-md">
                 Converta entre Snellen, Decimal e LogMAR.
             </p>
-            <form id="va-form" style="display:flex;flex-direction:column;gap:12px;">
+            <form id="va-form" class="flex-col-gap">
                 <div>
                     <label class="form-label">Acuidade Visual (Snellen)</label>
                     <select id="va-snellen" class="form-input">
@@ -79,27 +84,28 @@
                         <option value="20/400">20/400</option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary" style="justify-content:center;">Converter</button>
+                <button type="submit" class="btn btn-primary justify-center">Converter</button>
             </form>
 
-            <div id="va-result" style="display:none;margin-top:16px;">
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
-                    <div class="stat-card" style="text-align:center;">
+            <div id="va-result" style="display:none;" class="mt-md">
+                <div class="form-grid" style="grid-template-columns:1fr 1fr 1fr;">
+                    <div class="stat-card text-center">
                         <div class="stat-label">Snellen</div>
                         <div class="stat-value" id="va-out-snellen" style="font-size:1.3rem;">—</div>
                     </div>
-                    <div class="stat-card" style="text-align:center;">
+                    <div class="stat-card text-center">
                         <div class="stat-label">Decimal</div>
                         <div class="stat-value" id="va-out-decimal" style="font-size:1.3rem;color:var(--primary);">—</div>
                     </div>
-                    <div class="stat-card" style="text-align:center;">
+                    <div class="stat-card text-center">
                         <div class="stat-label">LogMAR</div>
                         <div class="stat-value" id="va-out-logmar" style="font-size:1.3rem;color:var(--navy);">—</div>
                     </div>
                 </div>
-                <div style="margin-top:12px;padding:10px;background:var(--slate-50);border-radius:8px;text-align:center;">
+                <div class="text-center mt-sm" style="padding:10px;background:var(--slate-50);border-radius:8px;">
                     <span id="va-out-category" style="font-weight:600;color:var(--slate-700);">—</span>
                 </div>
+                <button type="button" class="print-btn mt-sm no-print" onclick="window.print()">&#128424; Imprimir resultado</button>
             </div>
         </div>
     </div>
@@ -110,39 +116,42 @@
             <div class="card-title">&#9678; Correção de PIO por Paquimetria</div>
         </div>
         <div class="card-body">
-            <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 16px;">
+            <p class="text-muted text-small mb-md">
                 Ajusta a pressão intraocular medida pela espessura corneana central (Ehlers).
             </p>
-            <form id="pio-form" style="display:flex;flex-direction:column;gap:12px;">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
+            <form id="pio-form" class="flex-col-gap">
+                <div class="form-grid">
+                    <div class="form-group">
                         <label class="form-label">PIO medida (mmHg)</label>
-                        <input type="number" step="1" value="18" id="pio-measured" class="form-input">
+                        <input type="number" step="1" value="18" id="pio-measured" class="form-input" min="1" max="80">
+                        <div class="form-error" id="pio-measured-err">Valor deve estar entre 1 e 80 mmHg</div>
                     </div>
-                    <div>
+                    <div class="form-group">
                         <label class="form-label">Paquimetria (μm)</label>
-                        <input type="number" step="1" value="545" id="pio-pachymetry" class="form-input">
+                        <input type="number" step="1" value="545" id="pio-pachymetry" class="form-input" min="350" max="700">
+                        <div class="form-error" id="pio-pachy-err">Valor deve estar entre 350 e 700 μm</div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="justify-content:center;">Corrigir</button>
+                <button type="submit" class="btn btn-primary justify-center">Corrigir</button>
             </form>
 
-            <div id="pio-result" style="display:none;margin-top:16px;">
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div class="stat-card" style="text-align:center;">
+            <div id="pio-result" style="display:none;" class="mt-md">
+                <div class="form-grid">
+                    <div class="stat-card text-center">
                         <div class="stat-label">PIO Medida</div>
                         <div class="stat-value" id="pio-out-measured" style="font-size:1.5rem;">—</div>
                         <div class="stat-label">mmHg</div>
                     </div>
-                    <div class="stat-card" style="text-align:center;background:var(--teal-50);border:1px solid var(--primary);">
+                    <div class="stat-card text-center" style="background:var(--teal-50);border:1px solid var(--primary);">
                         <div class="stat-label">PIO Corrigida</div>
                         <div class="stat-value" id="pio-out-corrected" style="font-size:1.5rem;color:var(--primary);">—</div>
                         <div class="stat-label">mmHg</div>
                     </div>
                 </div>
-                <div style="margin-top:8px;padding:10px;background:var(--slate-50);border-radius:8px;font-size:0.8rem;color:var(--slate-600);text-align:center;">
+                <div class="text-center mt-sm text-small" style="padding:10px;background:var(--slate-50);border-radius:8px;color:var(--slate-600);">
                     Fator: <span id="pio-out-factor">—</span> mmHg | Referência: 545μm (Ehlers)
                 </div>
+                <button type="button" class="print-btn mt-sm no-print" onclick="window.print()">&#128424; Imprimir resultado</button>
             </div>
         </div>
     </div>
@@ -153,27 +162,27 @@
             <div class="card-title">&#128214; Tabela de Referência Rápida</div>
         </div>
         <div class="card-body">
-            <p style="color: var(--slate-600); font-size: 0.85rem; margin-bottom: 16px;">
+            <p class="text-muted text-small mb-md">
                 Conversões mais usadas na prática clínica.
             </p>
-            <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+            <table class="table-medical">
                 <thead>
-                    <tr style="background:var(--slate-50);border-bottom:2px solid var(--slate-200);">
-                        <th style="padding:8px 12px;text-align:left;">Snellen</th>
-                        <th style="padding:8px 12px;text-align:center;">Decimal</th>
-                        <th style="padding:8px 12px;text-align:center;">LogMAR</th>
-                        <th style="padding:8px 12px;text-align:left;">Classificação</th>
+                    <tr>
+                        <th>Snellen</th>
+                        <th style="text-align:center;">Decimal</th>
+                        <th style="text-align:center;">LogMAR</th>
+                        <th>Classificação</th>
                     </tr>
                 </thead>
-                <tbody id="va-ref-table">
-                    <tr><td style="padding:6px 12px;">20/20</td><td style="text-align:center;">1.0</td><td style="text-align:center;">0.00</td><td>Normal</td></tr>
-                    <tr style="background:var(--slate-50);"><td style="padding:6px 12px;">20/25</td><td style="text-align:center;">0.8</td><td style="text-align:center;">0.10</td><td>Normal</td></tr>
-                    <tr><td style="padding:6px 12px;">20/30</td><td style="text-align:center;">0.67</td><td style="text-align:center;">0.18</td><td>Leve</td></tr>
-                    <tr style="background:var(--slate-50);"><td style="padding:6px 12px;">20/40</td><td style="text-align:center;">0.5</td><td style="text-align:center;">0.30</td><td>Leve</td></tr>
-                    <tr><td style="padding:6px 12px;">20/60</td><td style="text-align:center;">0.33</td><td style="text-align:center;">0.48</td><td>Moderada</td></tr>
-                    <tr style="background:var(--slate-50);"><td style="padding:6px 12px;">20/100</td><td style="text-align:center;">0.2</td><td style="text-align:center;">0.70</td><td>Severa</td></tr>
-                    <tr><td style="padding:6px 12px;">20/200</td><td style="text-align:center;">0.1</td><td style="text-align:center;">1.00</td><td>Cegueira Legal</td></tr>
-                    <tr style="background:var(--slate-50);"><td style="padding:6px 12px;">20/400</td><td style="text-align:center;">0.05</td><td style="text-align:center;">1.30</td><td>Profunda</td></tr>
+                <tbody>
+                    <tr><td>20/20</td><td style="text-align:center;">1.0</td><td style="text-align:center;">0.00</td><td>Normal</td></tr>
+                    <tr><td>20/25</td><td style="text-align:center;">0.8</td><td style="text-align:center;">0.10</td><td>Normal</td></tr>
+                    <tr><td>20/30</td><td style="text-align:center;">0.67</td><td style="text-align:center;">0.18</td><td>Leve</td></tr>
+                    <tr><td>20/40</td><td style="text-align:center;">0.5</td><td style="text-align:center;">0.30</td><td>Leve</td></tr>
+                    <tr><td>20/60</td><td style="text-align:center;">0.33</td><td style="text-align:center;">0.48</td><td>Moderada</td></tr>
+                    <tr><td>20/100</td><td style="text-align:center;">0.2</td><td style="text-align:center;">0.70</td><td>Severa</td></tr>
+                    <tr><td>20/200</td><td style="text-align:center;">0.1</td><td style="text-align:center;">1.00</td><td>Cegueira Legal</td></tr>
+                    <tr><td>20/400</td><td style="text-align:center;">0.05</td><td style="text-align:center;">1.30</td><td>Profunda</td></tr>
                 </tbody>
             </table>
         </div>
@@ -183,17 +192,52 @@
 
 {% block scripts %}
 <script>
+// Validation helper
+function validateRange(inputId, errId, min, max) {
+    const input = document.getElementById(inputId);
+    const val = parseFloat(input.value);
+    const err = document.getElementById(errId);
+    if (isNaN(val) || val < min || val > max) {
+        input.classList.add('invalid');
+        err.classList.add('visible');
+        return false;
+    }
+    input.classList.remove('invalid');
+    err.classList.remove('visible');
+    return true;
+}
+
+// Clear validation on input
+document.querySelectorAll('.form-input').forEach(input => {
+    input.addEventListener('input', () => {
+        input.classList.remove('invalid');
+        const err = input.nextElementSibling;
+        if (err && err.classList.contains('form-error')) err.classList.remove('visible');
+    });
+});
+
 // IOL Calculator
 document.getElementById('iol-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const v1 = validateRange('iol-al', 'iol-al-err', 15, 40);
+    const v2 = validateRange('iol-k1', 'iol-k1-err', 35, 55);
+    const v3 = validateRange('iol-k2', 'iol-k2-err', 35, 55);
+    const v4 = validateRange('iol-target', 'iol-target-err', -10, 10);
+    if (!v1 || !v2 || !v3 || !v4) return;
+
     const al = document.getElementById('iol-al').value;
     const k1 = document.getElementById('iol-k1').value;
     const k2 = document.getElementById('iol-k2').value;
     const target = document.getElementById('iol-target').value;
 
-    const res = await api.get(`/api/v1/calculators/iol?al=${al}&k1=${k1}&k2=${k2}&target=${target}`);
-    document.getElementById('iol-power').textContent = res.result.iol_power;
-    document.getElementById('iol-result').style.display = 'block';
+    try {
+        const res = await api.get(`/api/v1/calculators/iol?al=${al}&k1=${k1}&k2=${k2}&target=${target}`);
+        document.getElementById('iol-power').textContent = res.result.iol_power;
+        document.getElementById('iol-result').style.display = 'block';
+        showToast('LIO calculada com sucesso', 'success');
+    } catch (err) {
+        showToast('Erro ao calcular LIO', 'error');
+    }
 });
 
 // VA Converter
@@ -201,21 +245,28 @@ document.getElementById('va-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const snellen = document.getElementById('va-snellen').value;
 
-    const res = await api.get(`/api/v1/calculators/va-convert?snellen=${snellen}`);
-    document.getElementById('va-out-snellen').textContent = res.snellen;
-    document.getElementById('va-out-decimal').textContent = res.decimal;
-    document.getElementById('va-out-logmar').textContent = res.logmar;
-    document.getElementById('va-out-category').textContent = res.category;
-    document.getElementById('va-result').style.display = 'block';
+    try {
+        const res = await api.get(`/api/v1/calculators/va-convert?snellen=${snellen}`);
+        document.getElementById('va-out-snellen').textContent = res.snellen;
+        document.getElementById('va-out-decimal').textContent = res.decimal;
+        document.getElementById('va-out-logmar').textContent = res.logmar;
+        document.getElementById('va-out-category').textContent = res.category;
+        document.getElementById('va-result').style.display = 'block';
+    } catch (err) {
+        showToast('Erro ao converter acuidade visual', 'error');
+    }
 });
 
 // IOP Correction (Ehlers formula)
 document.getElementById('pio-form').addEventListener('submit', (e) => {
     e.preventDefault();
+    const v1 = validateRange('pio-measured', 'pio-measured-err', 1, 80);
+    const v2 = validateRange('pio-pachymetry', 'pio-pachy-err', 350, 700);
+    if (!v1 || !v2) return;
+
     const measured = parseFloat(document.getElementById('pio-measured').value);
     const pachymetry = parseFloat(document.getElementById('pio-pachymetry').value);
 
-    // Ehlers correction: ~0.7 mmHg per 10μm deviation from 545μm
     const correction = (545 - pachymetry) * 0.07;
     const corrected = Math.round((measured + correction) * 10) / 10;
 
@@ -223,6 +274,7 @@ document.getElementById('pio-form').addEventListener('submit', (e) => {
     document.getElementById('pio-out-corrected').textContent = corrected;
     document.getElementById('pio-out-factor').textContent = (correction >= 0 ? '+' : '') + correction.toFixed(1);
     document.getElementById('pio-result').style.display = 'block';
+    showToast('PIO corrigida calculada', 'success');
 });
 </script>
 {% endblock %}

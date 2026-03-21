@@ -17,7 +17,7 @@
             </p>
         </div>
         <button class="btn btn-outline" onclick="dismissWelcome()" style="flex-shrink:0;color:var(--primary);border-color:var(--primary);">
-            Entendi ✓
+            Entendi &#10003;
         </button>
     </div>
 </div>
@@ -25,78 +25,81 @@
 <!-- What can I do? - Guided Cards -->
 <h3 class="section-title">O que você gostaria de fazer?</h3>
 <div class="action-cards-grid">
-
     <a href="/chat" class="action-card">
-        <div class="action-card-icon" style="background:rgba(13,148,136,0.1);color:var(--primary);">&#128172;</div>
+        <div class="action-card-icon stat-icon teal">&#128172;</div>
         <div class="action-card-title">Perguntar à IA</div>
         <div class="action-card-desc">
             Tire dúvidas sobre patologias, condutas, diagnósticos diferenciais ou farmacologia oftalmológica.
         </div>
         <div class="action-card-hint">Ex: "Conduta para edema macular diabético?"</div>
     </a>
-
     <a href="/second-opinion" class="action-card">
-        <div class="action-card-icon" style="background:rgba(239,68,68,0.1);color:var(--coral);">&#9733;</div>
+        <div class="action-card-icon stat-icon coral">&#9733;</div>
         <div class="action-card-title">Pedir Segunda Opinião</div>
         <div class="action-card-desc">
             Envie um caso clínico para outro especialista analisar. Retina, glaucoma, córnea e mais.
         </div>
         <div class="action-card-hint">Inclua imagens e história clínica</div>
     </a>
-
     <a href="/calculators" class="action-card">
-        <div class="action-card-icon" style="background:rgba(30,58,95,0.1);color:var(--navy);">&#8721;</div>
+        <div class="action-card-icon stat-icon navy">&#8721;</div>
         <div class="action-card-title">Usar Calculadoras</div>
         <div class="action-card-desc">
             Cálculo de LIO (SRK/T), conversão de acuidade visual e correção de PIO por paquimetria.
         </div>
         <div class="action-card-hint">Resultados instantâneos</div>
     </a>
-
     <a href="/trends" class="action-card">
-        <div class="action-card-icon" style="background:rgba(16,185,129,0.1);color:var(--emerald);">&#9650;</div>
+        <div class="action-card-icon stat-icon emerald">&#9650;</div>
         <div class="action-card-title">Ver Tendências</div>
         <div class="action-card-desc">
             Volume de exames, score de qualidade por tipo e ranking de operadores ao longo do tempo.
         </div>
         <div class="action-card-hint">Dados dos últimos 6 meses</div>
     </a>
-
 </div>
 
 <!-- Resumo do dia (collapsible) -->
-<div style="margin-top:32px;">
+<div class="mt-lg">
     <h3 class="section-title" style="cursor:pointer;" onclick="toggleSection('stats-section')">
         &#128200; Resumo do dia
-        <span id="stats-toggle" style="font-size:12px;color:var(--slate-400);margin-left:8px;">▼ mostrar</span>
+        <span id="stats-toggle" class="text-small text-muted" style="margin-left:8px;">&#9660; mostrar</span>
     </h3>
     <div id="stats-section" style="display:none;">
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon teal">&#128065;</div>
                 <div>
-                    <div class="stat-value" id="stat-exams-today">—</div>
+                    <div class="stat-value" id="stat-exams-today">
+                        <div class="skeleton skeleton-text" style="width:40px;height:28px;"></div>
+                    </div>
                     <div class="stat-label">Exames Hoje</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon coral">&#9733;</div>
                 <div>
-                    <div class="stat-value" id="stat-pending-cases">—</div>
+                    <div class="stat-value" id="stat-pending-cases">
+                        <div class="skeleton skeleton-text" style="width:30px;height:28px;"></div>
+                    </div>
                     <div class="stat-label">Casos Pendentes</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon emerald">&#128100;</div>
                 <div>
-                    <div class="stat-value" id="stat-specialists">—</div>
+                    <div class="stat-value" id="stat-specialists">
+                        <div class="skeleton skeleton-text" style="width:30px;height:28px;"></div>
+                    </div>
                     <div class="stat-label">Especialistas Online</div>
                 </div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon navy">&#9650;</div>
                 <div>
-                    <div class="stat-value" id="stat-quality">—</div>
+                    <div class="stat-value" id="stat-quality">
+                        <div class="skeleton skeleton-text" style="width:50px;height:28px;"></div>
+                    </div>
                     <div class="stat-label">Score Qualidade (30d)</div>
                 </div>
             </div>
@@ -105,17 +108,18 @@
 </div>
 
 <!-- Casos recentes (collapsible) -->
-<div style="margin-top:24px;">
+<div class="mt-md">
     <h3 class="section-title" style="cursor:pointer;" onclick="toggleSection('cases-section')">
         &#9733; Casos recentes de segunda opinião
-        <span id="cases-toggle" style="font-size:12px;color:var(--slate-400);margin-left:8px;">▼ mostrar</span>
+        <span id="cases-toggle" class="text-small text-muted" style="margin-left:8px;">&#9660; mostrar</span>
     </h3>
     <div id="cases-section" style="display:none;">
         <div id="recent-cases-list">
-            <div style="text-align:center;padding:24px;color:var(--slate-400);">Carregando...</div>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
         </div>
-        <div style="margin-top:12px;text-align:center;">
-            <a href="/second-opinion" class="btn btn-sm btn-outline">Ver todos os casos →</a>
+        <div class="text-center mt-sm">
+            <a href="/second-opinion" class="btn btn-sm btn-outline">Ver todos os casos &#8594;</a>
         </div>
     </div>
 </div>
@@ -123,129 +127,6 @@
 {% endblock %}
 
 {% block scripts %}
-<style>
-/* Welcome Banner */
-.welcome-banner {
-    background: linear-gradient(135deg, var(--primary) 0%, #0F766E 100%);
-    border-radius: var(--radius);
-    padding: 28px 32px;
-    margin-bottom: 28px;
-    color: white;
-}
-.welcome-content {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-.welcome-icon {
-    font-size: 40px;
-    flex-shrink: 0;
-}
-.welcome-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 4px;
-}
-.welcome-text {
-    font-size: 14px;
-    opacity: 0.9;
-    line-height: 1.6;
-}
-
-/* Section Titles */
-.section-title {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--slate-500);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 16px;
-}
-
-/* Action Cards */
-.action-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 16px;
-}
-.action-card {
-    background: var(--white);
-    border: 1px solid var(--slate-200);
-    border-radius: var(--radius);
-    padding: 24px;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.2s;
-    display: block;
-}
-.action-card:hover {
-    border-color: var(--primary);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
-    color: inherit;
-}
-.action-card-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    margin-bottom: 14px;
-}
-.action-card-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-}
-.action-card-desc {
-    font-size: 13px;
-    color: var(--slate-600);
-    line-height: 1.5;
-    margin-bottom: 10px;
-}
-.action-card-hint {
-    font-size: 12px;
-    color: var(--slate-400);
-    font-style: italic;
-    padding-top: 10px;
-    border-top: 1px solid var(--slate-100);
-}
-
-/* Simple case row */
-.case-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--slate-100);
-    background: var(--white);
-    border-radius: var(--radius-sm);
-    margin-bottom: 8px;
-    border: 1px solid var(--slate-200);
-}
-.case-row:hover {
-    background: var(--slate-50);
-}
-.case-row-number {
-    font-weight: 700;
-    color: var(--navy);
-    font-size: 14px;
-    min-width: 60px;
-}
-.case-row-info {
-    flex: 1;
-    font-size: 13px;
-    color: var(--slate-600);
-}
-.case-row-doctor {
-    font-weight: 600;
-    color: var(--slate-700);
-}
-</style>
-
 <script>
 // Welcome banner (first visit only)
 if (!localStorage.getItem('oftalmo_welcomed')) {
@@ -256,37 +137,26 @@ function dismissWelcome() {
     document.getElementById('welcome-banner').style.display = 'none';
 }
 
-// Toggle collapsible sections
-function toggleSection(id) {
-    const el = document.getElementById(id);
-    const toggleEl = document.getElementById(id.replace('-section', '-toggle'));
-    if (el.style.display === 'none') {
-        el.style.display = 'block';
-        toggleEl.textContent = '▲ ocultar';
-    } else {
-        el.style.display = 'none';
-        toggleEl.textContent = '▼ mostrar';
-    }
-}
-
 // Load stats
-fetch('/api/v1/dashboard/stats')
-    .then(r => r.json())
+api.get('/api/v1/dashboard/stats')
     .then(data => {
         document.getElementById('stat-exams-today').textContent = data.total_exams_today;
         document.getElementById('stat-pending-cases').textContent = data.pending_cases;
         document.getElementById('stat-specialists').textContent = data.active_specialists;
         document.getElementById('stat-quality').textContent = data.avg_quality_score;
     })
-    .catch(() => {});
+    .catch(() => showToast('Erro ao carregar estatísticas', 'error'));
 
 // Load recent cases
-fetch('/api/v1/cases/')
-    .then(r => r.json())
+api.get('/api/v1/cases/')
     .then(data => {
         const list = document.getElementById('recent-cases-list');
         if (!data.cases || data.cases.length === 0) {
-            list.innerHTML = '<div style="text-align:center;padding:24px;color:var(--slate-400);">Nenhum caso ainda. Clique em "Pedir Segunda Opinião" para começar.</div>';
+            list.innerHTML = `<div class="empty-state">
+                <svg class="empty-state-illustration" viewBox="0 0 80 80"><rect x="16" y="10" width="48" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 30h24M28 40h16M28 50h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                <p>Nenhum caso ainda.</p>
+                <a href="/second-opinion" class="btn btn-sm btn-primary">&#9992; Criar primeiro caso</a>
+            </div>`;
             return;
         }
         list.innerHTML = data.cases.slice(0, 3).map(c => {
@@ -297,18 +167,18 @@ fetch('/api/v1/cases/')
                     <div class="case-row-number">${c.case_number}</div>
                     <div class="case-row-info">
                         <span class="case-row-doctor">${c.requested_by.name}</span>
-                        → ${c.assigned_to.name}
+                        &#8594; ${c.assigned_to.name}
                         &nbsp;·&nbsp; Pac. ${c.patient.gender}, ${c.patient.age} anos
                     </div>
                     <span class="badge ${badgeClass}">${badgeText}</span>
-                    <span style="font-size:12px;color:var(--slate-400);">${c.responses_count} resp.</span>
+                    <span class="text-small text-muted">${c.responses_count} resp.</span>
                 </div>
             `;
         }).join('');
     })
     .catch(() => {
         document.getElementById('recent-cases-list').innerHTML =
-            '<div style="text-align:center;padding:24px;color:var(--slate-400);">Erro ao carregar casos</div>';
+            '<div class="empty-state"><p>Erro ao carregar casos</p></div>';
     });
 </script>
 {% endblock %}

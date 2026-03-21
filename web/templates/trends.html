@@ -13,17 +13,19 @@
         Esta página mostra quantos exames foram feitos, a qualidade média e quem são os médicos com melhor desempenho.
         Os dados vêm do banco de dados do sistema e são atualizados em tempo real.
     </div>
-    <button class="intro-dismiss" onclick="this.parentElement.style.display='none';localStorage.setItem('trends_intro_hidden','1');">✕</button>
+    <button class="intro-dismiss" onclick="dismissIntro('trends-intro','trends_intro_hidden')">&#10005;</button>
 </div>
 
 <!-- Volume Chart -->
-<div class="card" style="margin-bottom: 24px;">
+<div class="card mb-lg">
     <div class="card-header">
         <div class="card-title">&#128202; Volume de exames e qualidade por mês</div>
-        <div style="font-size:12px;color:var(--slate-400);">Últimos 6 meses</div>
+        <div class="text-small text-muted">Últimos 6 meses</div>
     </div>
     <div class="card-body" id="volume-chart">
-        <div style="text-align:center;padding:24px;color:var(--slate-400);">Carregando gráfico...</div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
     </div>
 </div>
 
@@ -35,11 +37,13 @@
             <div class="card-title">&#128065; Por tipo de exame</div>
         </div>
         <div class="card-body">
-            <p style="font-size:12px;color:var(--slate-400);margin-bottom:16px;">
+            <p class="text-small text-muted mb-md">
                 A barra mostra o score de qualidade médio (0–100). Quanto mais longa, melhor.
             </p>
             <div id="exam-types">
-                <div style="text-align:center;padding:16px;color:var(--slate-400);">Carregando...</div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
             </div>
         </div>
     </div>
@@ -50,11 +54,13 @@
             <div class="card-title">&#127942; Ranking de operadores</div>
         </div>
         <div class="card-body">
-            <p style="font-size:12px;color:var(--slate-400);margin-bottom:16px;">
+            <p class="text-small text-muted mb-md">
                 Ordenado pela qualidade média dos exames realizados.
             </p>
             <div id="rankings">
-                <div style="text-align:center;padding:16px;color:var(--slate-400);">Carregando...</div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
+                <div class="skeleton skeleton-text"></div>
             </div>
         </div>
     </div>
@@ -62,38 +68,12 @@
 {% endblock %}
 
 {% block scripts %}
-<style>
-.intro-box {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 24px;
-    background: var(--slate-50);
-    border: 1px solid var(--slate-200);
-    border-left: 4px solid var(--primary);
-    border-radius: var(--radius-sm);
-    margin-bottom: 20px;
-    font-size: 13px;
-    color: var(--slate-600);
-    line-height: 1.6;
-}
-.intro-icon { font-size: 24px; flex-shrink: 0; }
-.intro-dismiss {
-    background: none; border: none; font-size: 16px;
-    color: var(--slate-400); cursor: pointer; flex-shrink: 0; padding: 4px;
-}
-.intro-dismiss:hover { color: var(--slate-600); }
-</style>
-
 <script>
 // Hide intro if dismissed
-if (localStorage.getItem('trends_intro_hidden')) {
-    document.getElementById('trends-intro').style.display = 'none';
-}
+checkIntroDismissed('trends-intro', 'trends_intro_hidden');
 
 // Load trends chart
-fetch('/api/v1/analytics/trends')
-    .then(r => r.json())
+api.get('/api/v1/analytics/trends')
     .then(data => {
         const chart = document.getElementById('volume-chart');
         const maxVol = Math.max(...data.data.map(d => d.volume));
@@ -112,20 +92,18 @@ fetch('/api/v1/analytics/trends')
             </div>`;
         }).join('');
 
-        // Animate
         setTimeout(() => {
             document.querySelectorAll('.chart-bar').forEach(bar => {
                 bar.style.transition = 'width 0.8s ease';
             });
         }, 50);
-    });
+    })
+    .catch(() => showToast('Erro ao carregar tendências', 'error'));
 
 // Load exam types
-fetch('/api/v1/analytics/by-exam-type')
-    .then(r => r.json())
+api.get('/api/v1/analytics/by-exam-type')
     .then(data => {
-        const el = document.getElementById('exam-types');
-        el.innerHTML = data.exam_types.map(e => `
+        document.getElementById('exam-types').innerHTML = data.exam_types.map(e => `
             <div class="exam-type-row">
                 <div class="exam-type-header">
                     <span class="exam-type-name">${e.type}</span>
@@ -136,15 +114,14 @@ fetch('/api/v1/analytics/by-exam-type')
                 </div>
             </div>
         `).join('');
-    });
+    })
+    .catch(() => showToast('Erro ao carregar tipos de exame', 'error'));
 
 // Load rankings
-fetch('/api/v1/analytics/rankings')
-    .then(r => r.json())
+api.get('/api/v1/analytics/rankings')
     .then(data => {
-        const el = document.getElementById('rankings');
         const medals = ['gold', 'silver', 'bronze'];
-        el.innerHTML = data.rankings.map(r => {
+        document.getElementById('rankings').innerHTML = data.rankings.map(r => {
             const cls = medals[r.rank - 1] || 'default';
             return `
             <div class="ranking-row">
@@ -158,6 +135,7 @@ fetch('/api/v1/analytics/rankings')
                 </div>
             </div>`;
         }).join('');
-    });
+    })
+    .catch(() => showToast('Erro ao carregar rankings', 'error'));
 </script>
 {% endblock %}

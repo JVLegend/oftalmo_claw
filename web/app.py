@@ -65,7 +65,7 @@ async def second_opinion_page(request: Request):
 async def trends_page(request: Request):
     return templates.TemplateResponse("trends.html", {
         "request": request,
-        "title": "Dashboard de Tendências",
+        "title": "Tendências",
         "app_name": settings.app_name,
     })
 

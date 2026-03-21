@@ -12,6 +12,9 @@
 </head>
 <body>
 <div class="app-layout">
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -33,12 +36,11 @@
                 <a href="/" class="nav-item {% if title == 'Mission Control' %}active{% endif %}">
                     <span class="icon">&#9678;</span> Mission Control
                 </a>
-                <a href="/second-opinion" class="nav-item {% if title == 'Segunda Opiniao' %}active{% endif %}">
-                    <span class="icon">&#9733;</span> Segunda Opiniao
-                    <span class="nav-badge">3</span>
+                <a href="/second-opinion" class="nav-item {% if title == 'Segunda Opinião' %}active{% endif %}">
+                    <span class="icon">&#9733;</span> Segunda Opinião
                 </a>
-                <a href="/trends" class="nav-item {% if title == 'Dashboard de Tendencias' %}active{% endif %}">
-                    <span class="icon">&#9650;</span> Tendencias
+                <a href="/trends" class="nav-item {% if title == 'Tendências' %}active{% endif %}">
+                    <span class="icon">&#9650;</span> Tendências
                 </a>
             </div>
 
@@ -54,13 +56,13 @@
 
             <div class="nav-section">
                 <div class="nav-section-title">Em breve</div>
-                <a class="nav-item" style="opacity:0.4;cursor:default;">
+                <a class="nav-item disabled">
                     <span class="icon">&#128065;</span> Análise de Imagens
                 </a>
-                <a class="nav-item" style="opacity:0.4;cursor:default;">
+                <a class="nav-item disabled">
                     <span class="icon">&#9998;</span> Laudos
                 </a>
-                <a class="nav-item" style="opacity:0.4;cursor:default;">
+                <a class="nav-item disabled">
                     <span class="icon">&#9883;</span> Protocolos
                 </a>
             </div>
@@ -76,6 +78,7 @@
     <main class="main-content">
         {% block topbar %}
         <div class="topbar">
+            <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
             <div>
                 <div class="topbar-title">{% block page_title %}{{ title }}{% endblock %}</div>
                 <div class="topbar-subtitle">{% block page_subtitle %}{% endblock %}</div>
@@ -87,10 +90,23 @@
         {% endblock %}
 
         <div class="page-content">
+            <!-- Print header (visible only when printing) -->
+            <div class="print-header">
+                <h1>OftalmoClaw</h1>
+                <p>Relatório gerado em <script>document.write(new Date().toLocaleDateString('pt-BR'))</script></p>
+            </div>
+
             {% block content %}{% endblock %}
+
+            <div class="medical-disclaimer">
+                Este software é para apoio à decisão clínica. Não substitui avaliação médica presencial.
+            </div>
         </div>
     </main>
 </div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
 
 <script src="/static/js/app.js"></script>
 {% block scripts %}{% endblock %}

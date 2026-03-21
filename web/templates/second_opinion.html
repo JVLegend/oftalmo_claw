@@ -4,7 +4,7 @@
 {% block page_subtitle %}Peça a opinião de outro especialista sobre um caso clínico{% endblock %}
 
 {% block topbar_actions %}
-<button class="btn btn-primary" onclick="openNewCase()">&#9992; Novo Caso</button>
+<button class="btn btn-primary" onclick="openModal('new-case-modal')">&#9992; Novo Caso</button>
 {% endblock %}
 
 {% block content %}
@@ -14,10 +14,10 @@
     <div class="intro-icon">&#9733;</div>
     <div>
         <strong>Como funciona?</strong>
-        Você envia um caso com imagens e história clínica. Um especialista da área (retina, glaucoma, córnea, etc.)
+        Você envia um caso com história clínica e achados. Um especialista da área
         analisa e responde com sua opinião. Tudo fica registrado aqui.
     </div>
-    <button class="intro-dismiss" onclick="this.parentElement.style.display='none';localStorage.setItem('so_intro_hidden','1');">✕</button>
+    <button class="intro-dismiss" onclick="dismissIntro('so-intro','so_intro_hidden')">&#10005;</button>
 </div>
 
 <!-- Tabs -->
@@ -32,8 +32,8 @@
     <!-- Cases List -->
     <div id="cases-list">
         <div class="empty-state" id="cases-loading">
-            <div class="icon">&#9203;</div>
-            <p>Carregando casos...</p>
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
         </div>
     </div>
 
@@ -44,77 +44,166 @@
                 <div class="card-title">Especialistas Disponíveis</div>
             </div>
             <div id="specialists-list">
-                <div style="padding:20px;text-align:center;color:var(--slate-400);">Carregando...</div>
+                <div class="specialist-card">
+                    <div class="skeleton" style="width:44px;height:44px;border-radius:50%;"></div>
+                    <div style="flex:1;"><div class="skeleton skeleton-text"></div><div class="skeleton skeleton-text"></div></div>
+                </div>
             </div>
         </div>
 
         <!-- Help card -->
-        <div class="card" style="margin-top:20px;">
+        <div class="card mt-md">
             <div class="card-header">
                 <div class="card-title">&#128161; Dicas</div>
             </div>
             <div class="card-body" style="font-size:13px;color:var(--slate-600);line-height:1.7;">
                 <p>&#8226; <strong>Casos urgentes</strong> são priorizados e notificam os especialistas imediatamente.</p>
                 <p>&#8226; Inclua <strong>imagens</strong> sempre que possível — OCT, retinografia, campo visual.</p>
-                <p>&#8226; Descreva <strong>achados relevantes</strong> e sua hipótese diagnóstica para facilitar a análise.</p>
-                <p>&#8226; O <strong>bolinha verde</strong> ao lado do nome indica que o especialista está online agora.</p>
+                <p>&#8226; Descreva <strong>achados relevantes</strong> e sua hipótese diagnóstica.</p>
+                <p>&#8226; A <strong>bolinha verde</strong> indica que o especialista está online agora.</p>
             </div>
         </div>
     </div>
 </div>
+
+<!-- New Case Modal -->
+<div class="modal-overlay" id="new-case-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2>&#9992; Novo Caso de Segunda Opinião</h2>
+            <button class="modal-close" onclick="closeModal('new-case-modal')">&#10005;</button>
+        </div>
+        <form id="new-case-form" onsubmit="submitNewCase(event)">
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Idade do paciente *</label>
+                        <input type="number" class="form-input" name="patient_age" min="0" max="120" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sexo *</label>
+                        <select class="form-input" name="patient_gender" required>
+                            <option value="">Selecione</option>
+                            <option value="F">Feminino</option>
+                            <option value="M">Masculino</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Queixa principal *</label>
+                        <textarea class="form-input" name="chief_complaint" required placeholder="Descreva a queixa principal do paciente..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Achados do exame</label>
+                        <textarea class="form-input" name="exam_findings" placeholder="OCT, fundo de olho, campo visual, biomicroscopia..."></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">Hipótese diagnóstica</label>
+                        <input type="text" class="form-input" name="hypothesis" placeholder="Sua suspeita clínica">
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="form-label">História clínica</label>
+                        <textarea class="form-input" name="patient_history" placeholder="Antecedentes, medicações em uso, cirurgias anteriores..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Urgência *</label>
+                        <select class="form-input" name="urgency" required>
+                            <option value="normal">Normal</option>
+                            <option value="urgent">Urgente</option>
+                            <option value="emergency">Emergência</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Especialidade *</label>
+                        <select class="form-input" name="specialty_requested" required>
+                            <option value="general">Geral</option>
+                            <option value="retina">Retina</option>
+                            <option value="glaucoma">Glaucoma</option>
+                            <option value="cornea">Córnea</option>
+                            <option value="refractive">Refrativa</option>
+                            <option value="oculoplastics">Oculoplástica</option>
+                            <option value="strabismus">Estrabismo</option>
+                            <option value="neuro_ophthalmology">Neuro-oftalmologia</option>
+                            <option value="pediatric">Pediátrica</option>
+                            <option value="uveitis">Uveíte</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Solicitado por *</label>
+                        <select class="form-input" name="requested_by_id" id="field-requested-by" required>
+                            <option value="">Carregando...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Encaminhar para</label>
+                        <select class="form-input" name="assigned_to_id" id="field-assigned-to">
+                            <option value="">Automático (por especialidade)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeModal('new-case-modal')">Cancelar</button>
+                <button type="submit" class="btn btn-primary" id="btn-submit-case">&#9992; Criar Caso</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-<style>
-.intro-box {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px 24px;
-    background: var(--slate-50);
-    border: 1px solid var(--slate-200);
-    border-left: 4px solid var(--primary);
-    border-radius: var(--radius-sm);
-    margin-bottom: 20px;
-    font-size: 13px;
-    color: var(--slate-600);
-    line-height: 1.6;
-}
-.intro-icon { font-size: 24px; flex-shrink: 0; }
-.intro-dismiss {
-    background: none;
-    border: none;
-    font-size: 16px;
-    color: var(--slate-400);
-    cursor: pointer;
-    flex-shrink: 0;
-    padding: 4px;
-}
-.intro-dismiss:hover { color: var(--slate-600); }
-</style>
-
 <script>
 // Hide intro if already dismissed
-if (localStorage.getItem('so_intro_hidden')) {
-    document.getElementById('so-intro').style.display = 'none';
-}
+checkIntroDismissed('so-intro', 'so_intro_hidden');
 
-// Load cases from API
+// Store specialists for form dropdowns
+let specialistsList = [];
 let allCases = [];
-fetch('/api/v1/cases/')
-    .then(r => r.json())
+
+// Load specialists
+api.get('/api/v1/cases/specialists')
     .then(data => {
-        allCases = data.cases || [];
-        const pending = allCases.filter(c => c.status !== 'completed').length;
-        const completed = allCases.filter(c => c.status === 'completed').length;
-        document.getElementById('count-pending').textContent = pending;
-        document.getElementById('count-completed').textContent = completed;
-        renderCases('pending');
+        specialistsList = data.specialists || [];
+        const colors = ['#0D9488', '#1E3A5F', '#6366F1', '#0D9488', '#D97706'];
+        const list = document.getElementById('specialists-list');
+        list.innerHTML = specialistsList.map((s, i) => `
+            <div class="specialist-card">
+                <div class="specialist-avatar" style="background:${colors[i % colors.length]};">${s.initials}</div>
+                <div class="specialist-info">
+                    <div class="specialist-name">${s.name}</div>
+                    <div class="specialist-specialty">${s.specialty}</div>
+                    <div class="specialist-cases">${s.active_cases} caso${s.active_cases !== 1 ? 's' : ''} ativo${s.active_cases !== 1 ? 's' : ''}</div>
+                </div>
+                <div class="status-dot ${s.online ? 'online' : 'offline'}"></div>
+            </div>
+        `).join('');
+
+        // Populate form dropdowns
+        const reqBy = document.getElementById('field-requested-by');
+        const assignTo = document.getElementById('field-assigned-to');
+        reqBy.innerHTML = '<option value="">Selecione o médico</option>' +
+            specialistsList.map(s => `<option value="${s.id}">${s.name} — ${s.specialty}</option>`).join('');
+        assignTo.innerHTML = '<option value="">Automático (por especialidade)</option>' +
+            specialistsList.map(s => `<option value="${s.id}">${s.name} — ${s.specialty}</option>`).join('');
     })
-    .catch(() => {
-        document.getElementById('cases-list').innerHTML =
-            '<div class="empty-state"><div class="icon">⚠️</div><p>Erro ao carregar casos</p></div>';
-    });
+    .catch(() => showToast('Erro ao carregar especialistas', 'error'));
+
+// Load cases
+function loadCases() {
+    api.get('/api/v1/cases/')
+        .then(data => {
+            allCases = data.cases || [];
+            const pending = allCases.filter(c => c.status !== 'completed').length;
+            const completed = allCases.filter(c => c.status === 'completed').length;
+            document.getElementById('count-pending').textContent = pending;
+            document.getElementById('count-completed').textContent = completed;
+            renderCases('pending');
+        })
+        .catch(() => {
+            document.getElementById('cases-list').innerHTML =
+                '<div class="empty-state"><svg class="empty-state-illustration" viewBox="0 0 80 80"><circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 32h24M28 42h16M28 52h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><p>Erro ao carregar casos</p></div>';
+        });
+}
 
 function renderCases(filter) {
     const list = document.getElementById('cases-list');
@@ -123,28 +212,33 @@ function renderCases(filter) {
         : allCases.filter(c => c.status !== 'completed');
 
     if (filtered.length === 0) {
+        const isCompleted = filter === 'completed';
         list.innerHTML = `<div class="empty-state">
-            <div class="icon">${filter === 'completed' ? '✅' : '📋'}</div>
-            <p>${filter === 'completed' ? 'Nenhum caso concluído ainda.' : 'Nenhum caso pendente. Clique em "Novo Caso" para começar.'}</p>
+            <svg class="empty-state-illustration" viewBox="0 0 80 80">
+                ${isCompleted
+                    ? '<circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" stroke-width="2"/><path d="M26 42l10 10 18-22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'
+                    : '<rect x="16" y="10" width="48" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M28 30h24M28 40h16M28 50h20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'}
+            </svg>
+            <p>${isCompleted ? 'Nenhum caso concluído ainda.' : 'Nenhum caso pendente.'}</p>
+            ${!isCompleted ? '<button class="btn btn-primary" onclick="openModal(\'new-case-modal\')">&#9992; Criar primeiro caso</button>' : ''}
         </div>`;
         return;
     }
 
     list.innerHTML = filtered.map(c => {
-        const badgeClass = c.urgency === 'urgent' ? 'badge-urgent' : c.status === 'in_analysis' ? 'badge-analysis' : 'badge-pending';
-        const badgeIcon = c.urgency === 'urgent' ? '⚠️' : c.status === 'in_analysis' ? '💬' : '⏳';
-        const badgeText = c.urgency === 'urgent' ? 'Urgente' : c.status === 'in_analysis' ? 'Em Análise' : 'Pendente';
+        const badgeClass = c.urgency === 'urgent' ? 'badge-urgent' : c.urgency === 'emergency' ? 'badge-urgent' : c.status === 'in_analysis' ? 'badge-analysis' : 'badge-pending';
+        const badgeText = c.urgency === 'urgent' ? '⚠️ Urgente' : c.urgency === 'emergency' ? '🚨 Emergência' : c.status === 'in_analysis' ? '💬 Em Análise' : '⏳ Pendente';
         return `
         <div class="case-card">
             <div class="case-header">
                 <div style="display:flex;align-items:center;">
-                    <div class="case-icon" style="background:${c.urgency === 'urgent' ? 'rgba(239,68,68,0.1)' : 'rgba(59,130,246,0.1)'};">&#128065;</div>
+                    <div class="case-icon" style="background:${c.urgency !== 'normal' ? 'rgba(239,68,68,0.1)' : 'rgba(59,130,246,0.1)'};">&#128065;</div>
                     <div>
                         <div class="case-title">Caso ${c.case_number}</div>
                         <div class="case-patient">Paciente: ${c.patient.gender === 'F' ? 'Feminino' : 'Masculino'}, ${c.patient.age} anos</div>
                     </div>
                 </div>
-                <span class="badge ${badgeClass}">${badgeIcon} ${badgeText}</span>
+                <span class="badge ${badgeClass}">${badgeText}</span>
             </div>
             ${c.chief_complaint ? `<div style="font-size:13px;color:var(--slate-600);margin-bottom:12px;padding:8px 12px;background:var(--slate-50);border-radius:6px;">
                 <strong>Queixa:</strong> ${c.chief_complaint}
@@ -177,27 +271,44 @@ function filterCases(status, el) {
     renderCases(status);
 }
 
-// Load specialists from API
-fetch('/api/v1/cases/specialists')
-    .then(r => r.json())
-    .then(data => {
-        const list = document.getElementById('specialists-list');
-        const colors = ['#0D9488', '#1E3A5F', '#6366F1', '#0D9488', '#D97706'];
-        list.innerHTML = (data.specialists || []).map((s, i) => `
-            <div class="specialist-card">
-                <div class="specialist-avatar" style="background:${colors[i % colors.length]};">${s.initials}</div>
-                <div class="specialist-info">
-                    <div class="specialist-name">${s.name}</div>
-                    <div class="specialist-specialty">${s.specialty}</div>
-                    <div class="specialist-cases">${s.active_cases} caso${s.active_cases !== 1 ? 's' : ''} ativo${s.active_cases !== 1 ? 's' : ''}</div>
-                </div>
-                <div class="status-dot ${s.online ? 'online' : 'offline'}"></div>
-            </div>
-        `).join('');
-    });
+// Submit new case
+async function submitNewCase(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit-case');
+    const form = document.getElementById('new-case-form');
+    const fd = new FormData(form);
 
-function openNewCase() {
-    alert('Formulário de novo caso — em desenvolvimento.\n\nPor enquanto, use a API: POST /api/v1/cases/');
+    btn.disabled = true;
+    btn.textContent = 'Criando...';
+
+    try {
+        const body = {
+            patient_age: parseInt(fd.get('patient_age')),
+            patient_gender: fd.get('patient_gender'),
+            chief_complaint: fd.get('chief_complaint'),
+            exam_findings: fd.get('exam_findings') || null,
+            hypothesis: fd.get('hypothesis') || null,
+            patient_history: fd.get('patient_history') || null,
+            urgency: fd.get('urgency'),
+            specialty_requested: fd.get('specialty_requested'),
+            requested_by_id: parseInt(fd.get('requested_by_id')),
+            assigned_to_id: fd.get('assigned_to_id') ? parseInt(fd.get('assigned_to_id')) : null,
+        };
+
+        await api.post('/api/v1/cases/', body);
+        showToast('Caso criado com sucesso!', 'success');
+        closeModal('new-case-modal');
+        form.reset();
+        loadCases();
+    } catch (err) {
+        showToast(err.message || 'Erro ao criar caso', 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '&#9992; Criar Caso';
+    }
 }
+
+// Initial load
+loadCases();
 </script>
 {% endblock %}
