@@ -149,6 +149,19 @@
     </div>
 </div>
 
+<!-- Case Detail Modal -->
+<div class="modal-overlay" id="case-detail-modal">
+    <div class="modal" style="max-width:700px;">
+        <div class="modal-header">
+            <h2 id="detail-title">Caso #0000</h2>
+            <button class="modal-close" onclick="closeModal('case-detail-modal')">&#10005;</button>
+        </div>
+        <div class="modal-body" id="detail-body">
+            <div class="skeleton skeleton-card"></div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -229,7 +242,7 @@ function renderCases(filter) {
         const badgeClass = c.urgency === 'urgent' ? 'badge-urgent' : c.urgency === 'emergency' ? 'badge-urgent' : c.status === 'in_analysis' ? 'badge-analysis' : 'badge-pending';
         const badgeText = c.urgency === 'urgent' ? '⚠️ Urgente' : c.urgency === 'emergency' ? '🚨 Emergência' : c.status === 'in_analysis' ? '💬 Em Análise' : '⏳ Pendente';
         return `
-        <div class="case-card">
+        <div class="case-card" onclick="openCaseDetail(${c.id})" style="cursor:pointer;">
             <div class="case-header">
                 <div style="display:flex;align-items:center;">
                     <div class="case-icon" style="background:${c.urgency !== 'normal' ? 'rgba(239,68,68,0.1)' : 'rgba(59,130,246,0.1)'};">&#128065;</div>
@@ -305,6 +318,112 @@ async function submitNewCase(e) {
     } finally {
         btn.disabled = false;
         btn.innerHTML = '&#9992; Criar Caso';
+    }
+}
+
+// Open case detail modal
+async function openCaseDetail(caseId) {
+    document.getElementById('detail-title').textContent = 'Carregando...';
+    document.getElementById('detail-body').innerHTML = '<div class="skeleton skeleton-card"></div>';
+    openModal('case-detail-modal');
+
+    try {
+        const c = await api.get(`/api/v1/cases/${caseId}`);
+        document.getElementById('detail-title').textContent = `Caso ${c.case_number}`;
+
+        const badgeClass = c.urgency === 'urgent' ? 'badge-urgent' : c.status === 'in_analysis' ? 'badge-analysis' : c.status === 'completed' ? 'badge-completed' : 'badge-pending';
+        const badgeText = c.urgency === 'urgent' ? '⚠️ Urgente' : c.status === 'in_analysis' ? '💬 Em Análise' : c.status === 'completed' ? '✅ Concluído' : '⏳ Pendente';
+
+        let html = `
+            <div style="margin-bottom:16px;">
+                <span class="badge ${badgeClass}">${badgeText}</span>
+                <span class="text-small text-muted" style="margin-left:8px;">Paciente: ${c.patient.gender === 'F' ? 'Feminino' : 'Masculino'}, ${c.patient.age} anos</span>
+            </div>
+            <div class="case-detail-panel">
+                <div class="case-detail-field">
+                    <div class="case-detail-label">Solicitado por</div>
+                    <div class="case-detail-value">${c.requested_by.name}</div>
+                </div>
+                <div class="case-detail-field">
+                    <div class="case-detail-label">Atribuído a</div>
+                    <div class="case-detail-value">${c.assigned_to.name}</div>
+                </div>
+                ${c.chief_complaint ? `<div class="case-detail-field full">
+                    <div class="case-detail-label">Queixa principal</div>
+                    <div class="case-detail-value">${c.chief_complaint}</div>
+                </div>` : ''}
+                ${c.exam_findings ? `<div class="case-detail-field full">
+                    <div class="case-detail-label">Achados do exame</div>
+                    <div class="case-detail-value">${c.exam_findings}</div>
+                </div>` : ''}
+                ${c.hypothesis ? `<div class="case-detail-field full">
+                    <div class="case-detail-label">Hipótese diagnóstica</div>
+                    <div class="case-detail-value">${c.hypothesis}</div>
+                </div>` : ''}
+                ${c.patient_history ? `<div class="case-detail-field full">
+                    <div class="case-detail-label">História clínica</div>
+                    <div class="case-detail-value">${c.patient_history}</div>
+                </div>` : ''}
+            </div>
+        `;
+
+        // Opinions timeline
+        if (c.opinions && c.opinions.length > 0) {
+            html += '<h4 style="font-size:14px;font-weight:600;color:var(--navy);margin-bottom:12px;">Opiniões dos Especialistas</h4>';
+            html += '<div class="case-timeline">';
+            c.opinions.forEach(op => {
+                const date = op.created_at ? new Date(op.created_at).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-dot opinion"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-author">${op.doctor.name || 'Especialista'} ${op.doctor.specialty ? '— ' + op.doctor.specialty : ''}</span>
+                                <span class="timeline-time">${date}</span>
+                            </div>
+                            <div class="timeline-text">
+                                <strong>Diagnóstico:</strong> ${op.diagnosis}<br>
+                                <strong>Recomendação:</strong> ${op.recommendation}
+                                ${op.confidence ? '<br><span class="text-small text-muted">Confiança: ' + (op.confidence * 100).toFixed(0) + '%</span>' : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+
+        // Messages timeline
+        if (c.messages && c.messages.length > 0) {
+            html += '<h4 style="font-size:14px;font-weight:600;color:var(--navy);margin:20px 0 12px;">Discussão</h4>';
+            html += '<div class="case-timeline">';
+            c.messages.forEach(msg => {
+                const date = msg.created_at ? new Date(msg.created_at).toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+                html += `
+                    <div class="timeline-item">
+                        <div class="timeline-dot message"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <span class="timeline-author">${msg.doctor.name || 'Médico'}</span>
+                                <span class="timeline-time">${date}</span>
+                            </div>
+                            <div class="timeline-text">${msg.content}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+        }
+
+        // No opinions/messages yet
+        if ((!c.opinions || c.opinions.length === 0) && (!c.messages || c.messages.length === 0)) {
+            html += '<div class="empty-state" style="padding:24px;"><p>Nenhuma opinião ou mensagem ainda.</p></div>';
+        }
+
+        document.getElementById('detail-body').innerHTML = html;
+    } catch (err) {
+        document.getElementById('detail-body').innerHTML = '<div class="empty-state"><p>Erro ao carregar detalhes do caso</p></div>';
+        showToast('Erro ao carregar caso', 'error');
     }
 }
 

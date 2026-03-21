@@ -144,6 +144,85 @@ function renderMarkdown(text) {
     return html;
 }
 
+// ---- Notifications Panel ----
+function toggleNotifications() {
+    const panel = document.getElementById('notif-panel');
+    const userMenu = document.getElementById('user-menu');
+    if (userMenu) userMenu.classList.remove('active');
+    if (panel) panel.classList.toggle('active');
+}
+
+// ---- User Menu ----
+function toggleUserMenu() {
+    const menu = document.getElementById('user-menu');
+    const panel = document.getElementById('notif-panel');
+    if (panel) panel.classList.remove('active');
+    if (menu) menu.classList.toggle('active');
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', (e) => {
+    const userMenu = document.getElementById('user-menu');
+    const notifPanel = document.getElementById('notif-panel');
+    if (userMenu && !e.target.closest('.topbar-user') && !e.target.closest('.user-menu')) {
+        userMenu.classList.remove('active');
+    }
+    if (notifPanel && !e.target.closest('#notif-btn') && !e.target.closest('.notif-panel')) {
+        notifPanel.classList.remove('active');
+    }
+});
+
+// ---- Global Search ----
+let searchCache = [];
+
+async function loadSearchData() {
+    try {
+        const data = await api.get('/api/v1/cases/');
+        searchCache = (data.cases || []).map(c => ({
+            id: c.id,
+            number: c.case_number,
+            patient: `${c.patient.gender === 'F' ? 'Feminino' : 'Masculino'}, ${c.patient.age} anos`,
+            complaint: c.chief_complaint || '',
+            doctor: c.requested_by.name,
+            specialty: c.specialty_requested || '',
+            badge: c.urgency === 'urgent' ? 'Urgente' : c.status === 'in_analysis' ? 'Em análise' : 'Pendente',
+        }));
+    } catch (e) {}
+}
+
+function handleSearch(query) {
+    const results = document.getElementById('search-results');
+    if (!query || query.length < 2) {
+        results.classList.remove('active');
+        return;
+    }
+    if (searchCache.length === 0) {
+        loadSearchData().then(() => handleSearch(query));
+        return;
+    }
+    const q = query.toLowerCase();
+    const matches = searchCache.filter(c =>
+        c.number.toLowerCase().includes(q) ||
+        c.patient.toLowerCase().includes(q) ||
+        c.complaint.toLowerCase().includes(q) ||
+        c.doctor.toLowerCase().includes(q) ||
+        c.specialty.toLowerCase().includes(q)
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+        results.innerHTML = '<div class="search-no-results">Nenhum resultado para "' + query + '"</div>';
+    } else {
+        results.innerHTML = matches.map(c => `
+            <a href="/second-opinion" class="search-result-item">
+                <strong>${c.number}</strong>
+                <span>${c.patient} — ${c.complaint.substring(0, 40)}${c.complaint.length > 40 ? '...' : ''}</span>
+                <span class="badge badge-pending" style="font-size:10px;">${c.badge}</span>
+            </a>
+        `).join('');
+    }
+    results.classList.add('active');
+}
+
 // ---- Init on DOMContentLoaded ----
 document.addEventListener('DOMContentLoaded', () => {
     // Animate chart bars
@@ -155,4 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bar.style.transition = 'width 0.8s ease';
         });
     }, 100);
+
+    // Pre-load search data
+    loadSearchData();
 });

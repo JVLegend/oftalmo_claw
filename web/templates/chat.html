@@ -30,9 +30,18 @@
             </div>
         </div>
 
+        <!-- Suggested prompts -->
+        <div class="chat-suggestions" id="chat-suggestions">
+            <button class="chat-chip" onclick="useSuggestion(this)">&#128065; Conduta para edema macular diabético</button>
+            <button class="chat-chip" onclick="useSuggestion(this)">&#9733; DD de olho vermelho agudo</button>
+            <button class="chat-chip" onclick="useSuggestion(this)">&#128138; Colírios para glaucoma</button>
+            <button class="chat-chip" onclick="useSuggestion(this)">&#9678; Quando indicar trabeculectomia?</button>
+            <button class="chat-chip" onclick="useSuggestion(this)">&#128200; Interpretar OCT macular</button>
+        </div>
+
         <!-- Input -->
         <div class="chat-input-bar">
-            <input type="text" id="chat-input" class="form-input" placeholder="Ex: Qual a conduta para edema macular diabético com AV 20/60?"
+            <input type="text" id="chat-input" class="form-input" placeholder="Digite sua dúvida oftalmológica..."
                    autocomplete="off">
             <button id="chat-send" class="btn btn-primary" onclick="sendMessage()">Enviar</button>
         </div>
@@ -117,10 +126,21 @@ function getTimeStr() {
     return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 }
 
+function useSuggestion(btn) {
+    // Get text without the emoji prefix
+    const text = btn.textContent.trim().replace(/^[^\s]+\s/, '');
+    inputEl.value = text;
+    // Hide suggestions after use
+    document.getElementById('chat-suggestions').style.display = 'none';
+    sendMessage();
+}
+
 async function sendMessage() {
     const message = inputEl.value.trim();
     if (!message) return;
 
+    // Hide suggestions after first message
+    document.getElementById('chat-suggestions').style.display = 'none';
     addMessage(message, 'user');
     inputEl.value = '';
     sendBtn.disabled = true;

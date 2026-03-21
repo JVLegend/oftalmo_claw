@@ -8,6 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/theme.css">
     <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg">
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#1E3A5F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="OftalmoClaw">
+    <link rel="apple-touch-icon" href="/static/images/icon-192.png">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -38,6 +44,7 @@
                 </a>
                 <a href="/second-opinion" class="nav-item {% if title == 'Segunda Opinião' %}active{% endif %}">
                     <span class="icon">&#9733;</span> Segunda Opinião
+                    <span class="nav-badge" id="sidebar-cases-badge" style="display:none;">0</span>
                 </a>
                 <a href="/trends" class="nav-item {% if title == 'Tendências' %}active{% endif %}">
                     <span class="icon">&#9650;</span> Tendências
@@ -79,12 +86,74 @@
         {% block topbar %}
         <div class="topbar">
             <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">&#9776;</button>
-            <div>
+            <div class="topbar-left">
                 <div class="topbar-title">{% block page_title %}{{ title }}{% endblock %}</div>
                 <div class="topbar-subtitle">{% block page_subtitle %}{% endblock %}</div>
             </div>
+
+            <!-- Search -->
+            <div class="topbar-search no-print">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--slate-400)" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <input type="text" id="global-search" class="topbar-search-input" placeholder="Buscar caso, paciente, médico..."
+                       onfocus="this.parentElement.classList.add('focused')"
+                       onblur="setTimeout(()=>this.parentElement.classList.remove('focused'),200)"
+                       oninput="handleSearch(this.value)">
+                <div class="search-results" id="search-results"></div>
+            </div>
+
             <div class="topbar-actions">
                 {% block topbar_actions %}{% endblock %}
+
+                <!-- Notifications -->
+                <button class="topbar-icon-btn no-print" id="notif-btn" onclick="toggleNotifications()" aria-label="Notificações">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="notif-badge" id="notif-badge" style="display:none;">0</span>
+                </button>
+
+                <!-- User Profile -->
+                <div class="topbar-user no-print" onclick="toggleUserMenu()">
+                    <div class="topbar-avatar">Dr</div>
+                    <div class="topbar-user-info">
+                        <div class="topbar-user-name">Dr. Demo</div>
+                        <div class="topbar-user-role">Oftalmologista</div>
+                    </div>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </div>
+
+                <!-- User Menu Dropdown -->
+                <div class="user-menu" id="user-menu">
+                    <a href="#" class="user-menu-item" onclick="showToast('Perfil em desenvolvimento','info');return false;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        Meu Perfil
+                    </a>
+                    <a href="#" class="user-menu-item" onclick="showToast('Configurações em desenvolvimento','info');return false;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        Configurações
+                    </a>
+                    <div class="user-menu-divider"></div>
+                    <a href="#" class="user-menu-item" onclick="showToast('Logout em desenvolvimento','info');return false;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        Sair
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Panel -->
+        <div class="notif-panel" id="notif-panel">
+            <div class="notif-panel-header">
+                <strong>Notificações</strong>
+                <button class="intro-dismiss" onclick="toggleNotifications()">&#10005;</button>
+            </div>
+            <div id="notif-list">
+                <div class="notif-empty">Nenhuma notificação</div>
             </div>
         </div>
         {% endblock %}
@@ -109,6 +178,30 @@
 <div id="toast-container"></div>
 
 <script src="/static/js/app.js"></script>
+<script>
+// Load notification badge count (pending cases)
+api.get('/api/v1/dashboard/stats').then(data => {
+    const pending = data.pending_cases || 0;
+    const badge = document.getElementById('notif-badge');
+    const sidebarBadge = document.getElementById('sidebar-cases-badge');
+    if (pending > 0) {
+        badge.textContent = pending;
+        badge.style.display = 'flex';
+        sidebarBadge.textContent = pending;
+        sidebarBadge.style.display = 'inline';
+        // Populate notification list
+        document.getElementById('notif-list').innerHTML = `
+            <a href="/second-opinion" class="notif-item">
+                <div class="notif-item-icon" style="background:rgba(239,68,68,0.1);color:var(--coral);">&#9733;</div>
+                <div class="notif-item-content">
+                    <div class="notif-item-text"><strong>${pending}</strong> caso${pending > 1 ? 's' : ''} pendente${pending > 1 ? 's' : ''} de segunda opinião</div>
+                    <div class="notif-item-time">agora</div>
+                </div>
+            </a>
+        `;
+    }
+}).catch(() => {});
+</script>
 {% block scripts %}{% endblock %}
 </body>
 </html>
