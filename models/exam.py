@@ -1,7 +1,7 @@
 """Exam records and analytics models."""
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, Text, DateTime, ForeignKey, Index
 from models.database import Base
 
 
@@ -25,6 +25,13 @@ class ExamRecord(Base):
     report_signed_at = Column(DateTime, nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_exams_type", "exam_type"),
+        Index("ix_exams_doctor", "doctor_id"),
+        Index("ix_exams_created_at", "created_at"),
+        Index("ix_exams_type_created", "exam_type", "created_at"),
+    )
 
 
 class AnalyticsSnapshot(Base):

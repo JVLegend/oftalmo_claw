@@ -11,6 +11,7 @@ from datetime import datetime
 from models.database import get_db
 from models.case import Case, CaseStatus, CaseUrgency, Specialty, Opinion, CaseMessage
 from models.doctor import Doctor
+from web.sanitize import sanitize_text
 
 router = APIRouter()
 
@@ -51,8 +52,16 @@ class StatusUpdate(BaseModel):
 # --- Routes ---
 
 @router.get("/")
-async def list_cases(status: Optional[str] = None, db: AsyncSession = Depends(get_db)):
-    """List second opinion cases with related doctors."""
+async def list_cases(
+    status: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+    db: AsyncSession = Depends(get_db),
+):
+    """List second opinion cases with pagination."""
+    # Cap limit to prevent loading entire DB
+    limit = min(limit, 100)
+
     query = (
         select(Case)
         .options(
@@ -70,12 +79,20 @@ async def list_cases(status: Optional[str] = None, db: AsyncSession = Depends(ge
         except ValueError:
             pass
 
+    # Total count
+    count_query = select(func.count()).select_from(Case)
+    total = await db.scalar(count_query) or 0
+
+    # Apply pagination
+    query = query.limit(limit).offset(offset)
     result = await db.execute(query)
     cases = result.scalars().all()
 
     return {
         "cases": [_case_to_dict(c) for c in cases],
-        "total": len(cases),
+        "total": total,
+        "limit": limit,
+        "offset": offset,
     }
 
 
@@ -128,14 +145,20 @@ async def create_case(data: CaseCreate, db: AsyncSession = Depends(get_db)):
     except ValueError:
         specialty = Specialty.GENERAL
 
+    # Validate patient_age range
+    if not (0 <= data.patient_age <= 120):
+        raise HTTPException(status_code=400, detail="Idade deve estar entre 0 e 120")
+    if data.patient_gender not in ("M", "F"):
+        raise HTTPException(status_code=400, detail="Sexo deve ser M ou F")
+
     case = Case(
         case_number=case_number,
         patient_age=data.patient_age,
         patient_gender=data.patient_gender,
-        patient_history=data.patient_history,
-        chief_complaint=data.chief_complaint,
-        hypothesis=data.hypothesis,
-        exam_findings=data.exam_findings,
+        patient_history=sanitize_text(data.patient_history) if data.patient_history else None,
+        chief_complaint=sanitize_text(data.chief_complaint),
+        hypothesis=sanitize_text(data.hypothesis) if data.hypothesis else None,
+        exam_findings=sanitize_text(data.exam_findings) if data.exam_findings else None,
         urgency=urgency,
         status=CaseStatus.PENDING,
         specialty_requested=specialty,
@@ -180,8 +203,8 @@ async def submit_opinion(case_id: int, data: OpinionCreate, db: AsyncSession = D
     opinion = Opinion(
         case_id=case_id,
         doctor_id=data.doctor_id,
-        diagnosis=data.diagnosis,
-        recommendation=data.recommendation,
+        diagnosis=sanitize_text(data.diagnosis),
+        recommendation=sanitize_text(data.recommendation),
         confidence=data.confidence,
         references=data.references,
         ai_assisted=data.ai_assisted,
@@ -206,7 +229,7 @@ async def send_message(case_id: int, data: MessageCreate, db: AsyncSession = Dep
     msg = CaseMessage(
         case_id=case_id,
         doctor_id=data.doctor_id,
-        content=data.content,
+        content=sanitize_text(data.content),
     )
     db.add(msg)
     await db.commit()

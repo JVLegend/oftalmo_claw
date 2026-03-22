@@ -1,7 +1,7 @@
 """Chat history model for persistent conversations."""
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, Index
 from models.database import Base
 
 
@@ -15,6 +15,11 @@ class ChatHistory(Base):
     model = Column(String, nullable=True)
     provider = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+    __table_args__ = (
+        Index("ix_chat_created_at", "created_at"),
+        Index("ix_chat_doctor", "doctor_id"),
+    )
 
     def to_dict(self):
         return {

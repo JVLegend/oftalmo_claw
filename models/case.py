@@ -1,7 +1,7 @@
 """Second Opinion - Case and Opinion models."""
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Enum as SQLEnum
+from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Enum as SQLEnum, Index
 from sqlalchemy.orm import relationship
 from models.database import Base
 import enum
@@ -55,6 +55,14 @@ class Case(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     resolved_at = Column(DateTime, nullable=True)
+
+    __table_args__ = (
+        Index("ix_cases_status", "status"),
+        Index("ix_cases_urgency", "urgency"),
+        Index("ix_cases_created_at", "created_at"),
+        Index("ix_cases_requested_by", "requested_by_id"),
+        Index("ix_cases_assigned_to", "assigned_to_id"),
+    )
 
     requested_by = relationship("Doctor", foreign_keys=[requested_by_id], backref="requested_cases")
     assigned_to = relationship("Doctor", foreign_keys=[assigned_to_id], backref="assigned_cases")

@@ -10,6 +10,7 @@ from config import settings
 
 from models.database import get_db
 from models.chat import ChatHistory
+from web.sanitize import sanitize_text
 
 router = APIRouter()
 
@@ -63,12 +64,17 @@ async def chat(data: ChatMessage, db: AsyncSession = Depends(get_db)):
     result = await db.execute(context_query)
     context_messages = list(reversed(result.scalars().all()))
 
+    # Sanitize and validate input
+    clean_message = sanitize_text(data.message, max_length=4000)
+    if not clean_message:
+        raise HTTPException(status_code=400, detail="Mensagem não pode estar vazia")
+
     # Build messages array with context
     messages = [{"role": m.role, "content": m.content} for m in context_messages]
-    messages.append({"role": "user", "content": data.message})
+    messages.append({"role": "user", "content": clean_message})
 
     # Save user message to history
-    db.add(ChatHistory(role="user", content=data.message))
+    db.add(ChatHistory(role="user", content=clean_message))
     await db.flush()
 
     # Try providers in order of preference

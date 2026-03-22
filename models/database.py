@@ -15,6 +15,12 @@ class Base(DeclarativeBase):
 
 
 async def init_db():
+    # Import all models so Base.metadata knows about them before create_all
+    from models.doctor import Doctor  # noqa: F811
+    from models.case import Case, Opinion, CaseMessage, CaseImage  # noqa: F811
+    from models.exam import ExamRecord, AnalyticsSnapshot  # noqa: F811
+    from models.chat import ChatHistory  # noqa: F811
+
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     await seed_demo_data()

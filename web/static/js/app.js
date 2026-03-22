@@ -3,6 +3,17 @@
  * Created by GeekVision
  */
 
+// ---- Global Error Boundary ----
+window.onerror = function(msg, url, line, col, error) {
+    console.error('Global error:', msg, url, line);
+    showToast('Ocorreu um erro inesperado', 'error');
+    return true; // Prevent white screen
+};
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Unhandled promise rejection:', event.reason);
+    // Don't toast for network errors (already handled by API helper)
+});
+
 // ---- Toast Notifications ----
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
