@@ -30,6 +30,7 @@ async def seed_demo_data():
     from models.doctor import Doctor
     from models.case import Case, CaseStatus, CaseUrgency, Specialty, Opinion
     from models.exam import ExamRecord
+    from models.chat import ChatHistory  # noqa: F401 — ensures table is created
     from datetime import datetime, timedelta
     import random
 

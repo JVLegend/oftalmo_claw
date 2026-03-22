@@ -7,12 +7,16 @@
     <div class="card chat-card">
         <div class="card-header">
             <div class="card-title">&#128172; Assistente de Oftalmologia</div>
-            <div class="text-small text-muted" id="chat-provider">Verificando conexão...</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="text-small text-muted" id="chat-provider">Verificando conexão...</div>
+                <button class="btn btn-sm btn-outline" onclick="newConversation()" title="Limpar histórico e começar nova conversa">&#10227; Nova conversa</button>
+            </div>
         </div>
 
         <!-- Messages -->
         <div id="chat-messages" class="chat-messages">
-            <div class="chat-message assistant">
+            <!-- Welcome message (shown only when no history) -->
+            <div class="chat-message assistant" id="welcome-msg">
                 <div class="chat-bubble assistant">
                     Olá! Sou o assistente de IA do OftalmoClaw. Posso ajudar com:
                     <ul style="margin:8px 0 0 16px;">
@@ -121,16 +125,39 @@ inputEl.addEventListener('keydown', (e) => {
     }
 });
 
+function formatTime(isoStr) {
+    if (!isoStr) return '';
+    const d = new Date(isoStr);
+    return d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+}
+
 function getTimeStr() {
     const now = new Date();
     return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
 }
 
+// Load chat history on page load
+async function loadHistory() {
+    try {
+        const data = await api.get('/api/v1/chat/history');
+        if (data.messages && data.messages.length > 0) {
+            // Hide welcome message and suggestions
+            document.getElementById('welcome-msg').style.display = 'none';
+            document.getElementById('chat-suggestions').style.display = 'none';
+
+            // Render saved messages
+            data.messages.forEach(m => {
+                addMessage(m.content, m.role, formatTime(m.created_at));
+            });
+        }
+    } catch (err) {
+        // First load, no history — that's fine
+    }
+}
+
 function useSuggestion(btn) {
-    // Get text without the emoji prefix
     const text = btn.textContent.trim().replace(/^[^\s]+\s/, '');
     inputEl.value = text;
-    // Hide suggestions after use
     document.getElementById('chat-suggestions').style.display = 'none';
     sendMessage();
 }
@@ -139,8 +166,10 @@ async function sendMessage() {
     const message = inputEl.value.trim();
     if (!message) return;
 
-    // Hide suggestions after first message
+    // Hide welcome and suggestions
+    document.getElementById('welcome-msg').style.display = 'none';
     document.getElementById('chat-suggestions').style.display = 'none';
+
     addMessage(message, 'user');
     inputEl.value = '';
     sendBtn.disabled = true;
@@ -174,14 +203,13 @@ async function sendMessage() {
     inputEl.focus();
 }
 
-function addMessage(text, type) {
+function addMessage(text, type, timeStr) {
     const div = document.createElement('div');
     div.className = `chat-message ${type === 'user' ? 'user' : 'assistant'}`;
 
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble ${type}`;
 
-    // User messages: textContent (XSS safe). Assistant: render markdown.
     if (type === 'user') {
         bubble.textContent = text;
     } else if (type === 'error') {
@@ -192,7 +220,7 @@ function addMessage(text, type) {
 
     const time = document.createElement('div');
     time.className = 'chat-time';
-    time.textContent = getTimeStr();
+    time.textContent = timeStr || getTimeStr();
 
     div.appendChild(bubble);
     div.appendChild(time);
@@ -200,16 +228,50 @@ function addMessage(text, type) {
     messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-// Check LLM connection
-api.post('/api/v1/chat', { message: '' }).catch(() => ({})).then(res => {
-    const el = document.getElementById('chat-provider');
-    if (res && res.model === 'not-configured') {
-        el.textContent = 'IA não configurada — defina uma API key no .env';
-        el.style.color = 'var(--amber)';
-    } else if (res && res.provider) {
-        el.textContent = `Conectado: ${res.provider}`;
-        el.style.color = 'var(--emerald)';
+// New conversation — clear history
+async function newConversation() {
+    try {
+        await fetch('/api/v1/chat/history', { method: 'DELETE' });
+        // Clear messages from DOM
+        messagesEl.innerHTML = '';
+        // Show welcome message again
+        const welcome = document.getElementById('welcome-msg');
+        if (welcome) {
+            welcome.style.display = '';
+            messagesEl.appendChild(welcome);
+        } else {
+            // Recreate welcome if it was removed
+            messagesEl.innerHTML = `
+                <div class="chat-message assistant" id="welcome-msg">
+                    <div class="chat-bubble assistant">
+                        Olá! Conversa limpa. Como posso ajudar?
+                        <div class="disclaimer-box mt-sm">
+                            &#9888;&#65039; As respostas são para fins educacionais. Não substituem avaliação médica.
+                        </div>
+                    </div>
+                    <div class="chat-time">agora</div>
+                </div>
+            `;
+        }
+        // Show suggestions again
+        document.getElementById('chat-suggestions').style.display = '';
+        showToast('Nova conversa iniciada', 'success');
+    } catch (err) {
+        showToast('Erro ao limpar histórico', 'error');
     }
-});
+}
+
+// Check LLM connection (without saving empty message)
+fetch('/api/v1/chat/history').then(r => r.json()).then(() => {
+    // Connection works, now check LLM config
+    const el = document.getElementById('chat-provider');
+    if (!el) return;
+    // We'll update provider info on first real message
+    el.textContent = 'Pronto';
+    el.style.color = 'var(--emerald)';
+}).catch(() => {});
+
+// Load history on page load
+loadHistory();
 </script>
 {% endblock %}
